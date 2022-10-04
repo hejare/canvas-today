@@ -1,19 +1,27 @@
-import { inititateImageGeneration, runDailySlackPost } from "../../lib/canvasToday"
+import { fetchHeadline, inititateImageGeneration, postDailySlackPost } from "../../lib/canvasToday"
 
+const history = {}; // TODO: To prevent spam etc
 export default async function handler( req, res ) {
+  const meta = {};
   try {
-    const imageUrl = await inititateImageGeneration({prompt: "North Korea fires ballistic missile over Japan"});
-    await runDailySlackPost({imageUrl});
+    const { headline, original, filtered, headlineRegex } = await fetchHeadline();
+    meta.headlines = { headline, original, filtered, headlineRegex };
+    const imageUrl = await inititateImageGeneration({prompt: headline});
+    await postDailySlackPost({imageUrl, headline});
   } catch(e) {
     return res.status(500).json({
       status: 'nok',
       timestamp: Date.now(),
-      error: e,
+      error: {
+        message: e.message,
+        ...e
+      },
     })
   }
 
   res.status(200).json({
     status: 'ok',
     timestamp: Date.now(),
+    meta: meta
   })
 }
