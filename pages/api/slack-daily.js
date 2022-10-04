@@ -1,8 +1,9 @@
-import { runDailySlackPost } from "../../lib/canvasToday"
+import { inititateImageGeneration, runDailySlackPost } from "../../lib/canvasToday"
 
 export default async function handler( req, res ) {
   try {
-    await runDailySlackPost();
+    const imageUrl = await inititateImageGeneration({prompt: "North Korea fires ballistic missile over Japan"});
+    await runDailySlackPost({imageUrl});
   } catch(e) {
     return res.status(500).json({
       status: 'nok',

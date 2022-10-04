@@ -2,15 +2,15 @@ import { uuid } from "@/lib/common";
 
 // const { publicRuntimeConfig = {} } = getNextJSConfig() || {};
 
-const apiBaseUrl = process.env.SLACK_API_BASE_URL;
-const apiKey = process.env.SLACK_API_KEY;
-const baseHeaders = { "Content-Type": "application/json" };
+const apiBaseUrl = process.env.REPLICATE_API_BASE_URL;
+const apiKey = process.env.REPLICATE_API_KEY;
+const baseHeaders = { "Content-Type": "application/json", Authorization: `Token ${apiKey}` };
 const baseOptions = { headers: {}, body: {}, params: {}, stringify: true };
 
 const handleError = async ({ external, error }) => {
   if (external) {
     // console.error("Error in Slack: ", error);
-    return Promise.reject({location: "external (Slack)", message: error});
+    return Promise.reject({location: "external (Replciate)", message: error});
   }
 
   // Message for developer when Client crashes.
@@ -53,7 +53,7 @@ const fetcher = async (
   endpoint,
   { method, headers = {}, body, params = {} } = baseOptions,
 ) => {
-  const url = `${apiBaseUrl}/${apiKey}${endpoint}?${new URLSearchParams({
+  const url = `${apiBaseUrl}${endpoint}?${new URLSearchParams({
     ...params,
   })}`;
   const options = {
@@ -61,7 +61,7 @@ const fetcher = async (
     headers: { ...baseHeaders, ...additionalHeaders(), ...headers },
     body: ["GET", "DELETE"].includes(method) ? null : JSON.stringify(body),
   };
-// console.log("SLACK:", options)
+// console.log("REPLICATE:", options, url)
   return fetch(url, options).then(handleResult).catch(handleError);
 };
 
@@ -82,7 +82,7 @@ const generic =
       params,
     });
 
-export const slackClient = {
+export const replicateClient = {
   get: generic("GET"),
   post: post,
   delete: generic("DELETE"),
