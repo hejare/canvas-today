@@ -1,4 +1,5 @@
 const faunadb = require("faunadb");
+export const query = faunadb.query;
 
 const apiKey = process.env.FAUNADB_API_KEY;
 const apiBaseUrl = process.env.FAUNADB_API_BASE_URL;
