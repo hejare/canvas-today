@@ -12,7 +12,12 @@ export default async function handler(req, res) {
   try {
     const force = typeof req.query["force"] !== "undefined";
     const useMock = typeof req.query["use-mock"] !== "undefined";
-
+    if (useMock) {
+      meta.mocked = true;
+    }
+    if (force) {
+      meta.forced = true;
+    }
     if (!force && history[today]) {
       throw new Error(ALREADY_GENERATED);
     }
@@ -24,7 +29,6 @@ export default async function handler(req, res) {
     meta.imageUrl = imageUrl;
     meta.seed = seed;
     meta.prompt = prompt;
-
     const postSuccessful = await postDailySlackPost({ imageUrl, headline });
     if (postSuccessful) {
       history[today] = meta;
@@ -34,7 +38,7 @@ export default async function handler(req, res) {
     if (e.message === ALREADY_GENERATED) {
       meta = history[today];
       message = "Todays canvas has already been created";
-    } else {
+    } else if (typeof e.message !== "string") {
       message = e;
     }
 
