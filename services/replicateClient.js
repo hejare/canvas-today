@@ -10,7 +10,7 @@ const baseOptions = { headers: {}, body: {}, params: {}, stringify: true };
 const handleError = async ({ external, error }) => {
   if (external) {
     // console.error("Error in Slack: ", error);
-    return Promise.reject({location: "external (Replciate)", message: error});
+    return Promise.reject({ location: "external (Replciate)", message: error });
   }
 
   // Message for developer when Client crashes.
@@ -18,7 +18,7 @@ const handleError = async ({ external, error }) => {
 
   // Message for user when Client crashes
   const reason = "Oops! Something went wrong.";
-  return Promise.reject({location: "internal (Serverside or Client)", message: error || reason});
+  return Promise.reject({ location: "internal (Serverside or Client)", message: error || reason });
 };
 
 const convertResult = async (result) => {
@@ -51,7 +51,7 @@ const additionalHeaders = () => {
 
 const fetcher = async (
   endpoint,
-  { method, headers = {}, body, params = {} } = baseOptions,
+  { method, headers = {}, body, params = {} } = baseOptions
 ) => {
   const url = `${apiBaseUrl}${endpoint}?${new URLSearchParams({
     ...params,
@@ -61,7 +61,7 @@ const fetcher = async (
     headers: { ...baseHeaders, ...additionalHeaders(), ...headers },
     body: ["GET", "DELETE"].includes(method) ? null : JSON.stringify(body),
   };
-// console.log("REPLICATE:", options, url)
+  // console.log("REPLICATE:", options, url)
   return fetch(url, options).then(handleResult).catch(handleError);
 };
 
@@ -75,15 +75,15 @@ const post = (url, { headers, params, body } = baseOptions) =>
 
 const generic =
   (method) =>
-  (url, { headers, params } = baseOptions) =>
-    fetcher(url, {
-      method: method,
-      headers,
-      params,
-    });
+    (url, { headers, params } = baseOptions) =>
+      fetcher(url, {
+        method: method,
+        headers,
+        params,
+      });
 
 export const replicateClient = {
   get: generic("GET"),
   post: post,
   delete: generic("DELETE"),
-}
+};

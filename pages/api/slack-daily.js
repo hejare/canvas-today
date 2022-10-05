@@ -1,4 +1,5 @@
 import { getToday } from "@/lib/common";
+import { addHistory } from "@/lib/historyData";
 import { fetchHeadline, inititateImageGeneration, postDailySlackPost } from "../../lib/canvasToday";
 
 const ALREADY_GENERATED = "ALREADY_GENERATED";
@@ -31,7 +32,10 @@ export default async function handler(req, res) {
     meta.prompt = prompt;
     const postSuccessful = await postDailySlackPost({ imageUrl, headline });
     if (postSuccessful) {
-      history[today] = meta;
+      // Store to DB:
+      addHistory(meta);
+
+      history[today] = meta; // TODO: Remove in favor for faunaDb
     }
   } catch (e) {
     let message = e.message;
