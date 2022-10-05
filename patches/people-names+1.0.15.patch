@@ -1,12 +1,13 @@
 diff --git a/node_modules/people-names/data/additional-names.json b/node_modules/people-names/data/additional-names.json
 new file mode 100644
-index 0000000..76df97f
+index 0000000..279eed3
 --- /dev/null
 +++ b/node_modules/people-names/data/additional-names.json
-@@ -0,0 +1,4 @@
+@@ -0,0 +1,5 @@
 +[
 +  "Biden",
-+  "Trump"
++  "Trump",
++  "Putin"
 +]
 \ No newline at end of file
 diff --git a/node_modules/people-names/lib/index.js b/node_modules/people-names/lib/index.js
