@@ -1,6 +1,4 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
   return (
@@ -17,10 +15,10 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Check health{' '}
+          Check health{" "}
           <Link href="/api/health"><code className={styles.code}>api/health.js</code></Link>
         </p>
       </main>
     </div>
-  )
+  );
 }
