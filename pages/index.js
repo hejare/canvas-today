@@ -11,7 +11,7 @@ export default function Home() {
     async function getHistory() {
       const historyResponse = await backendClient.get("history");
       console.log((historyResponse));
-      setHistory(historyResponse.history);
+      setHistory(historyResponse.history.reverse());
     }
     getHistory();
   }, []);
