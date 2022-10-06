@@ -41,17 +41,19 @@ export default async function handler(req, res) {
       history[today] = meta; // TODO: Remove in favor for faunaDb
     }
   } catch (e) {
-    let message = e.message;
+    let errorResponse = {
+      ...e,
+    };
     if (e.message === ALREADY_GENERATED) {
       meta = history[today];
-      message = "Todays canvas has already been created";
+      errorResponse.message = "Todays canvas has already been created";
     } else if (typeof e.message !== "string") {
-      message = e;
+      errorResponse = e;
     }
 
     return res.status(500).json({
       status: "nok",
-      error: message,
+      error: errorResponse,
       meta: meta,
     });
   }

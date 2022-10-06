@@ -14,7 +14,7 @@ const handleError = async ({ external, error }) => {
 
   // Message for user when Client crashes
   const reason = "Oops! Something went wrong.";
-  return Promise.reject({ location: "internal (Serverside or Client)", message: error || reason });
+  return Promise.reject({ location: "internal (newsClient related - Serverside or Client)", message: error || reason });
 };
 
 const convertResult = async (result) => {
