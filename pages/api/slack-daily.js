@@ -1,10 +1,13 @@
 import { getToday } from "@/lib/common";
+import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { addHistory } from "@/lib/historyData";
 import { fetchHeadline, inititateImageGeneration, postDailySlackPost } from "../../lib/canvasToday";
 
 const ALREADY_GENERATED = "ALREADY_GENERATED";
 const history = {}; // Used for preventing spam etc
 export default async function handler(req, res) {
+  await corsMiddleware(req, res, cors);
+
   const today = getToday();
   let meta = {
     timestamp: Date.now(),
