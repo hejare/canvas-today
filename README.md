@@ -2,6 +2,17 @@
 
 _This is the way_
 
+
+Current dependencies:
+* CI: Netlify
+* AI/Image generating: replicate
+* News: reuters
+* Social media: Slack
+* Cloud DB: FaunaDB
+* Blockchain RPC: Alchemy
+* NFT Meta storage (IPFS): https://nft.storage/
+
+
 _Further Documentation_
 -----------------------
 * [Setup](docs/setup.md)
