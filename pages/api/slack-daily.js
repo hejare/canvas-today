@@ -36,7 +36,7 @@ export default async function handler(req, res) {
     const postSuccessful = await postDailySlackPost({ imageUrl, headline });
     if (postSuccessful) {
       // Store to DB:
-      addHistory(meta);
+      await addHistory(meta);
 
       history[today] = meta; // TODO: Remove in favor for faunaDb
     }
