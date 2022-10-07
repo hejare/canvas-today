@@ -10,7 +10,6 @@ export default function Home() {
   useEffect(() => {
     async function getHistory() {
       const historyResponse = await backendClient.get("history");
-      console.log((historyResponse));
       setHistory(historyResponse.history.reverse());
     }
     getHistory();

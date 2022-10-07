@@ -2,6 +2,7 @@ import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { addHistory } from "@/lib/historyData";
 import { fetchHeadline, inititateImageGeneration, postDailySlackPost } from "../../lib/canvasToday";
+import { storeFile } from "@/lib/ipfs";
 
 const ALREADY_GENERATED = "ALREADY_GENERATED";
 const history = {}; // Used for preventing spam etc
@@ -33,7 +34,18 @@ export default async function handler(req, res) {
     meta.imageUrl = imageUrl;
     meta.seed = seed;
     meta.prompt = prompt;
-    const postSuccessful = await postDailySlackPost({ imageUrl, headline });
+
+    const props = {
+      timestamp: meta.timestamp,
+      data: today,
+      headline: headline,
+      originalImageUrl: imageUrl,
+      seed: seed,
+      prompt: prompt,
+    };
+    const storedMetadata = await storeFile({ imageUrl, props });
+    meta.storedMetadata = storedMetadata;
+    const postSuccessful = await postDailySlackPost({ imageUrl, headline, storedMetadata });
     if (postSuccessful) {
       // Store to DB:
       await addHistory(meta);
@@ -41,19 +53,19 @@ export default async function handler(req, res) {
       history[today] = meta; // TODO: Remove in favor for faunaDb
     }
   } catch (e) {
-    let errorResponse = {
-      ...e,
-    };
+    let message = e.message;
     if (e.message === ALREADY_GENERATED) {
       meta = history[today];
-      errorResponse.message = "Todays canvas has already been created";
+      message = "Todays canvas has already been created";
     } else if (typeof e.message !== "string") {
-      errorResponse = e;
+      message = e;
+    } else if (e.body) {
+      message = JSON.parse(e.body);
     }
 
     return res.status(500).json({
       status: "nok",
-      error: errorResponse,
+      error: message,
       meta: meta,
     });
   }
