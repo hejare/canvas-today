@@ -37,14 +37,15 @@ export default async function handler(req, res) {
 
     const props = {
       timestamp: meta.timestamp,
-      data: today,
+      date: today,
       headline: headline,
       originalImageUrl: imageUrl,
       seed: seed,
       prompt: prompt,
     };
-    const storedMetadata = await storeFile({ imageUrl, props });
+    const storedMetadata = await storeFile({ imageUrl, props, useMock });
     meta.storedMetadata = storedMetadata;
+
     const postSuccessful = await postDailySlackPost({ imageUrl, headline, storedMetadata });
     if (postSuccessful) {
       // Store to DB:

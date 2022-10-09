@@ -4,7 +4,9 @@ const { getAccount } = require("./helpers");
 // eslint-disable-next-line no-unused-vars
 task("check-balance", "Prints out the balance of your account").setAction(async function (taskArguments, hre) {
   const account = getAccount();
-  console.log(`Account balance for ${account.address}: ${await account.getBalance()}`);
+  const balance = await account.getBalance();
+  console.log(`Account balance for ${account.address}: ${balance}`);
+  return balance;
 });
 
 task("deploy", "Deploys the NFT.sol contract").setAction(async function (taskArguments, hre) {
