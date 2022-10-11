@@ -1,9 +1,9 @@
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
+import { addLog } from "data/logData";
 import { addInteraction } from "data/slackInteractionData";
 
 export default async function handler(req, res) {
   await corsMiddleware(req, res, cors);
-
   const { method, body } = req;
   try {
     let data = {};
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       message = e;
     }
 
-    await addInteraction({ message: message });
+    await addLog({ where: "api/slack/interaction", message: message });
     return res.status(500).json({
       status: "nok",
       error: message,

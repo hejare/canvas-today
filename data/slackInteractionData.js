@@ -1,25 +1,28 @@
+import { ACTION_DOWNVOTE, ACTION_SEPARATOR, ACTION_UPVOTE } from "@/lib/slack";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
-// import { downvoteHeadline, upvoteHeadline } from "data/headlineData";
+import { downvoteHeadline, upvoteHeadline } from "data/headlineData";
 
 export const addInteraction = async (data) => {
-  // const id = ""; //data....
-  // const action = ""; //data....
+  const { actions, response_url, user } = data;
 
-  // let result;
-  // switch (action) {
-  //   case "upvote":
-  //     result = await upvoteHeadline(id);
-  //     break;
-  //   case "downvote":
-  //     result = await downvoteHeadline(id);
-  //     break;
-  //   default:
-  //     throw new Error(`Unsupported action: ${action}`);
-  // }
-  // JSON.stringify(data)
+  const [action, id] = actions[0].action_id.split(ACTION_SEPARATOR);
+  let result;
+  switch (action) {
+    case ACTION_UPVOTE:
+      result = await upvoteHeadline(id);
+      break;
+    case ACTION_DOWNVOTE:
+      result = await downvoteHeadline(id);
+      break;
+    // case "select":
+    //   result = await selectHeadline(id);
+    //   break;
+    default:
+      throw new Error(`Unsupported action: ${action}`);
+  }
+
   const logResult = faunaDbClient.query(
-    query.Create(query.Collection("slack-interaction"), { data: { ...data } })
+    query.Create(query.Collection("slack-interaction"), { data: { id, action, user: user.username, response_url } })
   );
-  return logResult;
-  // return { result, logResult };
+  return { result, logResult };
 };
