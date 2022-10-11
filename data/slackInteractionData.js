@@ -16,9 +16,9 @@ export const addInteraction = async (data) => {
   //   default:
   //     throw new Error(`Unsupported action: ${action}`);
   // }
-
+  // JSON.stringify(data)
   const logResult = faunaDbClient.query(
-    query.Create(query.Collection("slack-interaction"), { data: JSON.stringify(data) })
+    query.Create(query.Collection("slack-interaction"), { data: { body: JSON.stringify(data) } })
   );
   return logResult;
   // return { result, logResult };
