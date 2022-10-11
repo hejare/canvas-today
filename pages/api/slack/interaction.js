@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     let data = {};
     switch (method) {
       case "POST":
-        data.result = await addInteraction(body); // 
+        data.result = await addInteraction(JSON.parse(body.payload));
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

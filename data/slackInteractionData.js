@@ -18,7 +18,7 @@ export const addInteraction = async (data) => {
   // }
   // JSON.stringify(data)
   const logResult = faunaDbClient.query(
-    query.Create(query.Collection("slack-interaction"), { data: { body: JSON.stringify(data) } })
+    query.Create(query.Collection("slack-interaction"), { data: { ...data } })
   );
   return logResult;
   // return { result, logResult };
