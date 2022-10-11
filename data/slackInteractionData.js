@@ -6,8 +6,9 @@ import { addLog } from "data/logData";
 
 export const addInteraction = async (data) => {
   const { actions, response_url, user } = data;
-
+  const username = user?.username || "no-username";
   const [action, id] = actions[0].action_id.split(ACTION_SEPARATOR);
+
   let result;
   switch (action) {
     case ACTION_UPVOTE:
@@ -23,14 +24,17 @@ export const addInteraction = async (data) => {
       throw new Error(`Unsupported action: ${action}`);
   }
 
-  try {
-    slackClient.post(response_url, { body: { test: "Thanks for voting!" } });
-  } catch (e) {
-    addLog({ where: "alckInteractionData/post", message: e.message, response_url });
+  if (response_url) {
+    try {
+      slackClient.post(response_url, { body: { test: "Thanks for voting!" } });
+    } catch (e) {
+      addLog({ where: "slackInteractionData/post", message: e.message, response_url });
+    }
   }
+  addLog({ where: "slackInteractionData/post", action, id, response_url, username });
 
   const logResult = faunaDbClient.query(
-    query.Create(query.Collection("slack-interaction"), { data: { id, action, user: user.username, response_url } })
+    query.Create(query.Collection("slack-interaction"), { data: { id, action, user: username, response_url } })
   );
   return { result, logResult };
 };
