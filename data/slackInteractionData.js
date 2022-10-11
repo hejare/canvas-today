@@ -25,13 +25,15 @@ export const addInteraction = async (data) => {
   }
 
   if (response_url) {
-    try {
-      slackClient.post(response_url, { body: { test: "Thanks for voting!" } });
-    } catch (e) {
-      addLog({ where: "slackInteractionData/post", message: e.message, response_url });
-    }
+    // Do this, but async:
+    setTimeout(async () => {
+      try {
+        await slackClient.post(response_url, { body: { test: "Thanks for voting!" } });
+      } catch (e) {
+        addLog({ where: "slackInteractionData/post", message: e.message, response_url });
+      }
+    }, 500);
   }
-  addLog({ where: "slackInteractionData/post", action, id, response_url, username });
 
   const logResult = faunaDbClient.query(
     query.Create(query.Collection("slack-interaction"), { data: { id, action, user: username, response_url } })

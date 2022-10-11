@@ -7,14 +7,15 @@ const apiKey = process.env.SLACK_API_KEY;
 const baseHeaders = { "Content-Type": "application/json" };
 const baseOptions = { headers: {}, body: {}, params: {}, stringify: true };
 
-const handleError = async ({ external, error }) => {
+const handleError = async (props) => {
+  const { external, error } = props;
   if (external) {
     // console.error("Error in Slack: ", error);
     return Promise.reject({ location: "external (Slack)", message: error });
   }
 
   // Message for developer when Client crashes.
-  // console.error("Error in Client: ", error);
+  // console.error("Error in slackClient: ", props);
 
   // Message for user when Client crashes
   const reason = "Oops! Something went wrong.";
