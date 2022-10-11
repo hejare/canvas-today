@@ -9,7 +9,6 @@ export default async function handler(req, res) {
     let data = {};
     switch (method) {
       case "POST":
-        // JSON.parse(body.payload)
         data.result = await addInteraction(body.payload);
         break;
       default:
@@ -26,6 +25,7 @@ export default async function handler(req, res) {
       message = e;
     }
 
+    await addInteraction({ message: message });
     return res.status(500).json({
       status: "nok",
       error: message,
