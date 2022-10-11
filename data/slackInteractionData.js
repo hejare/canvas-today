@@ -1,7 +1,7 @@
-import { ACTION_DOWNVOTE, ACTION_SEPARATOR, ACTION_UPVOTE } from "@/lib/slack";
+import { ACTION_DOWNVOTE, ACTION_SELECT, ACTION_SEPARATOR, ACTION_UPVOTE } from "@/lib/slack";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
 import { slackClient } from "@/services/slackClient";
-import { downvoteHeadline, upvoteHeadline } from "data/headlineData";
+import { downvoteHeadline, setSelectedHeadline, upvoteHeadline } from "data/headlineData";
 import { addLog } from "data/logData";
 
 export const addInteraction = async (data) => {
@@ -17,9 +17,9 @@ export const addInteraction = async (data) => {
     case ACTION_DOWNVOTE:
       result = await downvoteHeadline(id);
       break;
-    // case "select":
-    //   result = await selectHeadline(id);
-    //   break;
+    case ACTION_SELECT:
+      result = await setSelectedHeadline(id);
+      break;
     default:
       throw new Error(`Unsupported action: ${action}`);
   }
@@ -30,7 +30,7 @@ export const addInteraction = async (data) => {
       try {
         await slackClient.post(response_url, { body: { test: "Thanks for voting!" } });
       } catch (e) {
-        addLog({ where: "slackInteractionData/post", message: e.message, response_url });
+        addLog({ where: "slackInteractionData/post response", message: e.message, response_url });
       }
     }, 500);
   }

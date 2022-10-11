@@ -10,10 +10,9 @@ export const getHeadlineStatus = async () => {
     )
   );
   return dbResponse.data.map(d => {
-    const ref = JSON.stringify(d.ref);
     return {
       ...d.data,
-      ref: JSON.parse(ref)["@ref"].id,
+      ref: d.ref.id,
     };
   });
 };
@@ -138,5 +137,48 @@ export const appendHeadlines = async (rawHeadlines) => {
   );
 };
 
+export const getSelectedHeadline = async () => {
+  const dbResponse = await faunaDbClient.query(
+    query.Map(
+      query.Paginate(
+        query.Match(query.Index("date-selected-index"), "2022-10-11", true)
+      ),
+      query.Lambda(x => query.Get(x))
+    )
+  );
 
+  // THERE SHOULD ONLY BE ONE!!!
+  if (dbResponse.data.length === 0) {
+    return null;
+  } else if (dbResponse.data.length > 1) {
+    throw new Error(`We have too many selected headliens! ${dbResponse.length}`);
+  }
+
+  return {
+    ...dbResponse.data[0],
+    id: dbResponse.data[0].ref.id,
+  };
+};
+
+
+export const setSelectedHeadline = async (id) => {
+  const result = {};
+
+  const currentSelectedHeadline = await getSelectedHeadline();
+  if (currentSelectedHeadline) {
+    currentSelectedHeadline.selected = false;
+    faunaDbClient.query(
+      query.Update(query.Ref(query.Collection("headline"), currentSelectedHeadline.id), { data: currentSelectedHeadline })
+    );
+    result.previousSelectedSetToFalse = currentSelectedHeadline.id;
+  }
+
+  const headline = await getHeadline(id);
+  headline.selected = true;
+
+  result.dbResult = await faunaDbClient.query(
+    query.Update(query.Ref(query.Collection("headline"), id), { data: headline })
+  );
+  return result;
+};
 
