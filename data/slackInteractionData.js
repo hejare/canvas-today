@@ -1,4 +1,4 @@
-import { ACTION_DOWNVOTE, ACTION_SELECT, ACTION_SEPARATOR, ACTION_UPVOTE } from "@/lib/slack";
+import { ACTION_DOWNVOTE_ART, ACTION_DOWNVOTE_HEADLINE, ACTION_SELECT_ART, ACTION_SELECT_HEADLINE, ACTION_SEPARATOR, ACTION_UPVOTE_ART, ACTION_UPVOTE_HEADLINE } from "@/lib/slack";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
 import { slackClient } from "@/services/slackClient";
 import { downvoteHeadline, setSelectedHeadline, upvoteHeadline } from "data/headlineData";
@@ -11,13 +11,22 @@ export const addInteraction = async (data) => {
 
   let result;
   switch (action) {
-    case ACTION_UPVOTE:
+    case ACTION_UPVOTE_HEADLINE:
       result = await upvoteHeadline(id);
       break;
-    case ACTION_DOWNVOTE:
+    case ACTION_DOWNVOTE_HEADLINE:
       result = await downvoteHeadline(id);
       break;
-    case ACTION_SELECT:
+    case ACTION_SELECT_HEADLINE:
+      result = await setSelectedHeadline(id);
+      break;
+    case ACTION_UPVOTE_ART:
+      result = await upvoteHeadline(id);
+      break;
+    case ACTION_DOWNVOTE_ART:
+      result = await downvoteHeadline(id);
+      break;
+    case ACTION_SELECT_ART:
       result = await setSelectedHeadline(id);
       break;
     default:

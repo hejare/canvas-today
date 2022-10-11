@@ -1,9 +1,10 @@
-import { inititateImageGeneration } from "@/lib/canvasToday";
+import { generateArts } from "@/lib/canvasToday";
 import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { getHeadlinesToday, getSelectedHeadline } from "data/headlineData";
 import { addLog } from "data/logData";
 
+const NR_OF_ALTERNATIVES = 3;
 export default async function handler(req, res) {
   await corsMiddleware(req, res, cors);
 
@@ -24,7 +25,7 @@ export default async function handler(req, res) {
       headline = votedHeadline.headline;
     }
 
-    const result = await inititateImageGeneration(headline);
+    const result = await generateArts(headline, NR_OF_ALTERNATIVES);
     meta.result = result;
     // if (postSuccessful) {
     //   // TODO: Store status?

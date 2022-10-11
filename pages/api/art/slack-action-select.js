@@ -1,7 +1,7 @@
 import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
-import { postSelectHeadlineAction } from "@/lib/slack";
-import { getHeadlinesToday } from "data/headlineData";
+import { postSelectArtAction } from "@/lib/slack";
+import { getArtsToday } from "data/artData";
 import { addLog } from "data/logData";
 
 export default async function handler(req, res) {
@@ -13,11 +13,11 @@ export default async function handler(req, res) {
     today,
   };
   try {
-    const headlines = await getHeadlinesToday();
+    const arts = await getArtsToday();
 
-    const topVoted = headlines.sort((a, b) => b.votes - a.votes).slice(0, 3);
+    const topVoted = arts.sort((a, b) => b.votes - a.votes).slice(0, 3);
     meta.topVoted = topVoted;
-    const postSuccessful = await postSelectHeadlineAction(topVoted);
+    const postSuccessful = await postSelectArtAction(topVoted);
     if (postSuccessful) {
       // TODO: Store status?
     }
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
       message = JSON.parse(e.body);
     }
 
-    await addLog({ where: "api/headline/slack-action-select", message: message, meta });
+    await addLog({ where: "api/art/slack-action-select", message: message, meta });
     return res.status(500).json({
       status: "nok",
       error: message,

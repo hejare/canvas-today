@@ -1,6 +1,6 @@
 import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
-import { postHeadlinesSlackForVoting } from "@/lib/slack";
+import { postVoteHeadlineAction } from "@/lib/slack";
 import { getHeadlinesToday } from "data/headlineData";
 import { addLog } from "data/logData";
 
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   try {
     const todaysHeadlines = await getHeadlinesToday();
     meta.headlines = todaysHeadlines;
-    const postSuccessful = await postHeadlinesSlackForVoting(todaysHeadlines);
+    const postSuccessful = await postVoteHeadlineAction(todaysHeadlines);
     if (postSuccessful) {
       // TODO: Store status?
     }
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       message = JSON.parse(e.body);
     }
 
-    await addLog({ where: "api/headline/slack-for-voting", message: message, meta });
+    await addLog({ where: "api/headline/slack-action-vote", message: message, meta });
     return res.status(500).json({
       status: "nok",
       error: message,
