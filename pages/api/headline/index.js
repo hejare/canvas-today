@@ -1,7 +1,7 @@
-import { addHeadline, addHeadlines, getAllHeadlines } from "data/headlineData";
+import { addHeadline, addHeadlines, getAllHeadlines, getHeadlinesToday } from "data/headlineData";
 
 export default async function handler(req, res) {
-  const { method, body } = req;
+  const { method, body, query } = req;
   try {
     let data = {};
     switch (method) {
@@ -11,7 +11,7 @@ export default async function handler(req, res) {
           : await addHeadline(body);
         break;
       case "GET":
-        data.result = await getAllHeadlines();
+        data.result = query.today ? await getHeadlinesToday() : await getAllHeadlines();
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

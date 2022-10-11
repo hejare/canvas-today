@@ -54,7 +54,7 @@ const fetcher = async (
   const url = `${endpoint.replace("ipfs://", "https://w3s.link/ipfs/")}#x-ipfs-companion-no-redirect?${new URLSearchParams({
     ...params,
   })}`;
-  console.log("proxy url: ", url);
+
   const options = {
     method,
     headers: { ...baseHeaders, ...additionalHeaders(), ...headers },

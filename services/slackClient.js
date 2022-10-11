@@ -53,15 +53,18 @@ const fetcher = async (
   endpoint,
   { method, headers = {}, body, params = {} } = baseOptions
 ) => {
-  const url = `${apiBaseUrl}/${apiKey}${endpoint}?${new URLSearchParams({
-    ...params,
-  })}`;
+  // Allowing any endpoint here is to simplify usage when POSTing to a response_url given by slack durin interaction
+  const url = endpoint.indexOf("http") === 0
+    ? endpoint
+    : `${apiBaseUrl}/${apiKey}${endpoint}?${new URLSearchParams({
+      ...params,
+    })}`;
+
   const options = {
     method,
     headers: { ...baseHeaders, ...additionalHeaders(), ...headers },
     body: ["GET", "DELETE"].includes(method) ? null : JSON.stringify(body),
   };
-  // console.log("SLACK:", options)
   return fetch(url, options).then(handleResult).catch(handleError);
 };
 
