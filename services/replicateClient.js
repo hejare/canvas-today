@@ -2,7 +2,7 @@ import { uuid } from "@/lib/common";
 
 // const { publicRuntimeConfig = {} } = getNextJSConfig() || {};
 
-const apiBaseUrl = process.env.REPLICATE_API_BASE_URL;
+const apiBaseUrl = process.env.REPLICATE_API_BASE_URL + process.env.REPLICATE_API_MODEL;
 const apiKey = process.env.REPLICATE_API_KEY;
 const baseHeaders = { "Content-Type": "application/json", Authorization: `Token ${apiKey}` };
 const baseOptions = { headers: {}, body: {}, params: {}, stringify: true };

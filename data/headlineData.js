@@ -155,7 +155,7 @@ export const getSelectedHeadline = async () => {
   }
 
   return {
-    ...dbResponse.data[0],
+    ...dbResponse.data[0].data,
     id: dbResponse.data[0].ref.id,
   };
 };
