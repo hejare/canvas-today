@@ -40,3 +40,16 @@ export const getArtsToday = async () => {
     id: d.ref.id,
   }));
 };
+
+export const getAllArts = async () => {
+  const dbResponse = await faunaDbClient.query(
+    query.Map(
+      query.Paginate(query.Documents(query.Collection("art"))),
+      query.Lambda(x => query.Get(x))
+    )
+  );
+  return dbResponse.data.map(d => ({
+    ...d.data,
+    id: d.ref.id,
+  }));
+};

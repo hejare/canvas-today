@@ -1,7 +1,7 @@
 import { backendClient } from "@/services/backendClient";
 import { useEffect, useState } from "react";
 
-export default function Headlines() {
+export default function HeadlinesPage() {
   const [headlines, setHeadlines] = useState([]);
 
   useEffect(() => {
