@@ -34,7 +34,11 @@ export default async function handler(req, res) {
       message = JSON.parse(e.body);
     }
 
-    await addLog({ where: "api/headline/slack-action-select", message: message, meta });
+    await addLog({
+      where: "api/headline/slack-action-select",
+      message: message,
+      meta,
+    });
     return res.status(500).json({
       status: "nok",
       error: message,

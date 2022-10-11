@@ -6,7 +6,10 @@ const baseOptions = { headers: {}, body: {}, params: {}, stringify: true };
 const handleError = async ({ external, error }) => {
   if (external) {
     // console.error("Error in Slack: ", error);
-    return Promise.reject({ location: "external (ipfsProxy site)", message: error });
+    return Promise.reject({
+      location: "external (ipfsProxy site)",
+      message: error,
+    });
   }
 
   // Message for developer when Client crashes.
@@ -14,7 +17,10 @@ const handleError = async ({ external, error }) => {
 
   // Message for user when Client crashes
   const reason = "Oops! Something went wrong.";
-  return Promise.reject({ location: "internal (ipfsProxyClient related - Serverside or Client)", message: error || reason });
+  return Promise.reject({
+    location: "internal (ipfsProxyClient related - Serverside or Client)",
+    message: error || reason,
+  });
 };
 
 const convertResult = async (result) => {
@@ -47,11 +53,14 @@ const additionalHeaders = () => {
 
 const fetcher = async (
   endpoint,
-  { method, headers = {}, body, params = {} } = baseOptions
+  { method, headers = {}, body, params = {} } = baseOptions,
 ) => {
   // Pass the ipfs address through a ipfs to https proxy:
   // List of proxies can be found here: https://ipfs.github.io/public-gateway-checker/
-  const url = `${endpoint.replace("ipfs://", "https://w3s.link/ipfs/")}#x-ipfs-companion-no-redirect?${new URLSearchParams({
+  const url = `${endpoint.replace(
+    "ipfs://",
+    "https://w3s.link/ipfs/",
+  )}#x-ipfs-companion-no-redirect?${new URLSearchParams({
     ...params,
   })}`;
 
@@ -74,12 +83,12 @@ const post = (ipfsUrl, { headers, params, body } = baseOptions) =>
 
 const generic =
   (method) =>
-    (ipfsUrl, { headers, params } = baseOptions) =>
-      fetcher(ipfsUrl, {
-        method: method,
-        headers,
-        params,
-      });
+  (ipfsUrl, { headers, params } = baseOptions) =>
+    fetcher(ipfsUrl, {
+      method: method,
+      headers,
+      params,
+    });
 
 export const ipfsProxyClient = {
   get: generic("GET"),

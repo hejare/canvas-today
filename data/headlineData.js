@@ -6,10 +6,10 @@ export const getHeadlineStatus = async () => {
   const dbResponse = await faunaDbClient.query(
     query.Map(
       query.Paginate(query.Documents(query.Collection("headline-status"))),
-      query.Lambda(x => query.Get(x))
-    )
+      query.Lambda((x) => query.Get(x)),
+    ),
   );
-  return dbResponse.data.map(d => {
+  return dbResponse.data.map((d) => {
     return {
       ...d.data,
       ref: d.ref.id,
@@ -19,7 +19,7 @@ export const getHeadlineStatus = async () => {
 
 export const setHeadlineStatus = (status) => {
   return faunaDbClient.query(
-    query.Create(query.Collection("headline-status"), { status: status })
+    query.Create(query.Collection("headline-status"), { status: status }),
   );
 };
 
@@ -27,10 +27,10 @@ export const getAllHeadlines = async () => {
   const dbResponse = await faunaDbClient.query(
     query.Map(
       query.Paginate(query.Documents(query.Collection("headline"))),
-      query.Lambda(x => query.Get(x))
-    )
+      query.Lambda((x) => query.Get(x)),
+    ),
   );
-  return dbResponse.data.map(d => ({
+  return dbResponse.data.map((d) => ({
     ...d.data,
     id: d.ref.id,
   }));
@@ -40,11 +40,11 @@ export const getHeadlinesToday = async () => {
   const dbResponse = await faunaDbClient.query(
     query.Map(
       query.Paginate(query.Match(query.Index("date-index"), getToday())),
-      query.Lambda(x => query.Get(x))
-    )
+      query.Lambda((x) => query.Get(x)),
+    ),
   );
 
-  return dbResponse.data.map(d => ({
+  return dbResponse.data.map((d) => ({
     ...d.data,
     id: d.ref.id,
   }));
@@ -52,7 +52,7 @@ export const getHeadlinesToday = async () => {
 
 export const getHeadline = async (id) => {
   const dbResponse = await faunaDbClient.query(
-    query.Get(query.Ref(query.Collection("headline"), id))
+    query.Get(query.Ref(query.Collection("headline"), id)),
   );
   return {
     ...dbResponse.data,
@@ -62,13 +62,13 @@ export const getHeadline = async (id) => {
 
 export const setHeadline = (id, data) => {
   return faunaDbClient.query(
-    query.Update(query.Ref(query.Collection("headline"), id), { data: data })
+    query.Update(query.Ref(query.Collection("headline"), id), { data: data }),
   );
 };
 
 export const addHeadline = (data) => {
   return faunaDbClient.query(
-    query.Create(query.Collection("headline"), { data })
+    query.Create(query.Collection("headline"), { data }),
   );
 };
 
@@ -78,18 +78,15 @@ export const addHeadlines = (data) => {
       data,
       query.Lambda(
         "data",
-        query.Create(
-          query.Collection("headline"),
-          { data: query.Var("data") }
-        )
-      )
-    )
+        query.Create(query.Collection("headline"), { data: query.Var("data") }),
+      ),
+    ),
   );
 };
 
 export const deleteHeadline = (id) => {
   return faunaDbClient.query(
-    query.Delete(query.Ref(query.Collection("headline"), id))
+    query.Delete(query.Ref(query.Collection("headline"), id)),
   );
 };
 
@@ -101,7 +98,9 @@ export const upvoteHeadline = async (id) => {
     headline.votes += 1;
   }
   return faunaDbClient.query(
-    query.Update(query.Ref(query.Collection("headline"), id), { data: headline })
+    query.Update(query.Ref(query.Collection("headline"), id), {
+      data: headline,
+    }),
   );
 };
 
@@ -113,27 +112,31 @@ export const downvoteHeadline = async (id) => {
     headline.votes -= 1;
   }
   return faunaDbClient.query(
-    query.Update(query.Ref(query.Collection("headline"), id), { data: headline })
+    query.Update(query.Ref(query.Collection("headline"), id), {
+      data: headline,
+    }),
   );
 };
 
 export const appendHeadlines = async (rawHeadlines) => {
   const todaysHeadlines = await getHeadlinesToday();
 
-  const storedHeadlines = todaysHeadlines.map((todaysHeadline) => todaysHeadline.headline);
-  const headlinesToAdd = rawHeadlines.filter(rawHeadline => !storedHeadlines.includes(rawHeadline));
+  const storedHeadlines = todaysHeadlines.map(
+    (todaysHeadline) => todaysHeadline.headline,
+  );
+  const headlinesToAdd = rawHeadlines.filter(
+    (rawHeadline) => !storedHeadlines.includes(rawHeadline),
+  );
   const newHeadlines = headlinesToAdd.map(headlineModel);
 
   return faunaDbClient.query(
-    query.Map(newHeadlines,
+    query.Map(
+      newHeadlines,
       query.Lambda(
         "data",
-        query.Create(
-          query.Collection("headline"),
-          { data: query.Var("data") }
-        )
-      )
-    )
+        query.Create(query.Collection("headline"), { data: query.Var("data") }),
+      ),
+    ),
   );
 };
 
@@ -141,17 +144,19 @@ export const getSelectedHeadline = async () => {
   const dbResponse = await faunaDbClient.query(
     query.Map(
       query.Paginate(
-        query.Match(query.Index("date-selected-index"), "2022-10-11", true)
+        query.Match(query.Index("date-selected-index"), "2022-10-11", true),
       ),
-      query.Lambda(x => query.Get(x))
-    )
+      query.Lambda((x) => query.Get(x)),
+    ),
   );
 
   // THERE SHOULD ONLY BE ONE!!!
   if (dbResponse.data.length === 0) {
     return null;
   } else if (dbResponse.data.length > 1) {
-    throw new Error(`We have too many selected headliens! ${dbResponse.length}`);
+    throw new Error(
+      `We have too many selected headliens! ${dbResponse.length}`,
+    );
   }
 
   return {
@@ -160,7 +165,6 @@ export const getSelectedHeadline = async () => {
   };
 };
 
-
 export const setSelectedHeadline = async (id) => {
   const result = {};
 
@@ -168,7 +172,10 @@ export const setSelectedHeadline = async (id) => {
   if (currentSelectedHeadline) {
     currentSelectedHeadline.selected = false;
     faunaDbClient.query(
-      query.Update(query.Ref(query.Collection("headline"), currentSelectedHeadline.id), { data: currentSelectedHeadline })
+      query.Update(
+        query.Ref(query.Collection("headline"), currentSelectedHeadline.id),
+        { data: currentSelectedHeadline },
+      ),
     );
     result.previousSelectedSetToFalse = currentSelectedHeadline.id;
   }
@@ -177,8 +184,9 @@ export const setSelectedHeadline = async (id) => {
   headline.selected = true;
 
   result.dbResult = await faunaDbClient.query(
-    query.Update(query.Ref(query.Collection("headline"), id), { data: headline })
+    query.Update(query.Ref(query.Collection("headline"), id), {
+      data: headline,
+    }),
   );
   return result;
 };
-

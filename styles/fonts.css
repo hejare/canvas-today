@@ -1,0 +1,53 @@
+@font-face {
+  font-family: "AnoRegular-Regular";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/static/fonts/AnoRegular-Regular.otf);
+}
+
+@font-face {
+  font-family: "AnoBlack-Regular";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/static/fonts/AnoBlack-Regular.otf);
+}
+
+@font-face {
+  font-family: "AnoBlack-WideItalic";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/static/fonts/AnoBlack-WideItalic.otf);
+}
+
+@font-face {
+  font-family: "AnoBold-Regular";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/static/fonts/AnoBold-Regular.otf);
+}
+
+@font-face {
+  font-family: "Gilroy-Regular";
+  src: url(/static/fonts/Gilroy-Regular-400.otf);
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gilroy-Bold";
+  src: url(/static/fonts/Gilroy-Bold-700.otf);
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Epson-1";
+  src: url(/static/fonts/Epson1.otf);
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

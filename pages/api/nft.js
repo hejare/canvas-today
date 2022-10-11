@@ -1,8 +1,16 @@
-import { getLatestBlock, getNfts, getOutboundTransfers } from "@/lib/alchemyData";
+import {
+  getLatestBlock,
+  getNfts,
+  getOutboundTransfers,
+} from "@/lib/alchemyData";
 
 export default async function handler(req, res) {
   try {
-    const [latestBlock, nfts, outboundTransfers] = await Promise.all([getLatestBlock(), getNfts(), getOutboundTransfers()]);
+    const [latestBlock, nfts, outboundTransfers] = await Promise.all([
+      getLatestBlock(),
+      getNfts(),
+      getOutboundTransfers(),
+    ]);
 
     res.status(200).json({
       status: "ok",

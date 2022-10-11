@@ -1,8 +1,49 @@
-import "../styles/globals.css";
+import React from "react";
+import Head from "next/head";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
+import "@/styles/globals.css";
+import themes from "@/styles/themes";
 
-// eslint-disable-next-line no-unused-vars
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
-}
+const theme = themes.dark; // I know, we are now removing ability to switch theme without hard reload, but what the hell...
 
-export default MyApp;
+const GlobalStyle = createGlobalStyle`
+  {${theme.typography}}
+  body {
+    color: ${theme.palette.text.primary};
+    background-color: ${theme.palette.background.primary};
+  }
+  a {
+    color: ${theme.palette.action.link};
+  }
+`;
+
+const App = ({ Component, pageProps }) => {
+  return (
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, maximum-scale=5, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
+      </Head>
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
+      <GlobalStyle />
+    </>
+  );
+};
+
+App.getInitialProps = async ({ Component, ctx }) => {
+  let pageProps = {};
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return {
+    pageProps,
+  };
+};
+
+export default App;

@@ -1,7 +1,19 @@
-import { ACTION_DOWNVOTE_ART, ACTION_DOWNVOTE_HEADLINE, ACTION_SELECT_ART, ACTION_SELECT_HEADLINE, ACTION_SEPARATOR, ACTION_UPVOTE_ART, ACTION_UPVOTE_HEADLINE } from "@/lib/slack";
+import {
+  ACTION_DOWNVOTE_ART,
+  ACTION_DOWNVOTE_HEADLINE,
+  ACTION_SELECT_ART,
+  ACTION_SELECT_HEADLINE,
+  ACTION_SEPARATOR,
+  ACTION_UPVOTE_ART,
+  ACTION_UPVOTE_HEADLINE,
+} from "@/lib/slack";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
 import { slackClient } from "@/services/slackClient";
-import { downvoteHeadline, setSelectedHeadline, upvoteHeadline } from "data/headlineData";
+import {
+  downvoteHeadline,
+  setSelectedHeadline,
+  upvoteHeadline,
+} from "data/headlineData";
 import { addLog } from "data/logData";
 
 export const addInteraction = async (data) => {
@@ -37,15 +49,23 @@ export const addInteraction = async (data) => {
     // Do this, but async:
     setTimeout(async () => {
       try {
-        await slackClient.post(response_url, { body: { test: "Thanks for voting!" } });
+        await slackClient.post(response_url, {
+          body: { test: "Thanks for voting!" },
+        });
       } catch (e) {
-        addLog({ where: "slackInteractionData/post response", message: e.message, response_url });
+        addLog({
+          where: "slackInteractionData/post response",
+          message: e.message,
+          response_url,
+        });
       }
     }, 500);
   }
 
   const logResult = faunaDbClient.query(
-    query.Create(query.Collection("slack-interaction"), { data: { id, action, user: username, response_url } })
+    query.Create(query.Collection("slack-interaction"), {
+      data: { id, action, user: username, response_url },
+    }),
   );
   return { result, logResult };
 };

@@ -19,7 +19,10 @@ const handleError = async (props) => {
 
   // Message for user when Client crashes
   const reason = "Oops! Something went wrong.";
-  return Promise.reject({ location: "internal (slackClient related - Serverside or Client)", message: error || reason });
+  return Promise.reject({
+    location: "internal (slackClient related - Serverside or Client)",
+    message: error || reason,
+  });
 };
 
 const convertResult = async (result) => {
@@ -52,14 +55,15 @@ const additionalHeaders = () => {
 
 const fetcher = async (
   endpoint,
-  { method, headers = {}, body, params = {} } = baseOptions
+  { method, headers = {}, body, params = {} } = baseOptions,
 ) => {
   // Allowing any endpoint here is to simplify usage when POSTing to a response_url given by slack durin interaction
-  const url = endpoint.indexOf("http") === 0
-    ? endpoint
-    : `${apiBaseUrl}/${apiKey}${endpoint}?${new URLSearchParams({
-      ...params,
-    })}`;
+  const url =
+    endpoint.indexOf("http") === 0
+      ? endpoint
+      : `${apiBaseUrl}/${apiKey}${endpoint}?${new URLSearchParams({
+          ...params,
+        })}`;
 
   const options = {
     method,
@@ -79,12 +83,12 @@ const post = (url, { headers, params, body } = baseOptions) =>
 
 const generic =
   (method) =>
-    (url, { headers, params } = baseOptions) =>
-      fetcher(url, {
-        method: method,
-        headers,
-        params,
-      });
+  (url, { headers, params } = baseOptions) =>
+    fetcher(url, {
+      method: method,
+      headers,
+      params,
+    });
 
 export const slackClient = {
   get: generic("GET"),

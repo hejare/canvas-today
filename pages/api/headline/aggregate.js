@@ -12,7 +12,8 @@ export default async function handler(req, res) {
     today,
   };
   try {
-    const { headline, original, filtered, headlineRegex } = await fetchHeadline();
+    const { headline, original, filtered, headlineRegex } =
+      await fetchHeadline();
     meta.headlines = { headline, original, filtered, headlineRegex };
     meta.result = await appendHeadlines(filtered);
   } catch (e) {

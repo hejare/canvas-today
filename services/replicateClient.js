@@ -2,9 +2,13 @@ import { uuid } from "@/lib/common";
 
 // const { publicRuntimeConfig = {} } = getNextJSConfig() || {};
 
-const apiBaseUrl = process.env.REPLICATE_API_BASE_URL + process.env.REPLICATE_API_MODEL;
+const apiBaseUrl =
+  process.env.REPLICATE_API_BASE_URL + process.env.REPLICATE_API_MODEL;
 const apiKey = process.env.REPLICATE_API_KEY;
-const baseHeaders = { "Content-Type": "application/json", Authorization: `Token ${apiKey}` };
+const baseHeaders = {
+  "Content-Type": "application/json",
+  Authorization: `Token ${apiKey}`,
+};
 const baseOptions = { headers: {}, body: {}, params: {}, stringify: true };
 
 const handleError = async ({ external, error }) => {
@@ -18,7 +22,10 @@ const handleError = async ({ external, error }) => {
 
   // Message for user when Client crashes
   const reason = "Oops! Something went wrong.";
-  return Promise.reject({ location: "internal (replicateClient related - Serverside or Client)", message: error || reason });
+  return Promise.reject({
+    location: "internal (replicateClient related - Serverside or Client)",
+    message: error || reason,
+  });
 };
 
 const convertResult = async (result) => {
@@ -51,7 +58,7 @@ const additionalHeaders = () => {
 
 const fetcher = async (
   endpoint,
-  { method, headers = {}, body, params = {} } = baseOptions
+  { method, headers = {}, body, params = {} } = baseOptions,
 ) => {
   const url = `${apiBaseUrl}${endpoint}?${new URLSearchParams({
     ...params,
@@ -75,12 +82,12 @@ const post = (url, { headers, params, body } = baseOptions) =>
 
 const generic =
   (method) =>
-    (url, { headers, params } = baseOptions) =>
-      fetcher(url, {
-        method: method,
-        headers,
-        params,
-      });
+  (url, { headers, params } = baseOptions) =>
+    fetcher(url, {
+      method: method,
+      headers,
+      params,
+    });
 
 export const replicateClient = {
   get: generic("GET"),

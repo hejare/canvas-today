@@ -1,0 +1,44 @@
+{
+  "env": {
+    "node": true,
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "next"
+  ],
+  "plugins": ["react", "react-hooks", "prettier"],
+  "rules": {
+    "react/prop-types": 0,
+    "no-unused-vars": "warn",
+    "no-case-declarations": 0,
+    "react/require-default-props": "off",
+    "prefer-destructuring": "off",
+    "prettier/prettier": "error",
+    "react-hooks/exhaustive-deps": 0,
+    "react/jsx-props-no-spreading": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
