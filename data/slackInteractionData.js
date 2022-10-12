@@ -9,6 +9,7 @@ import {
 } from "@/lib/slack";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
 import { slackClient } from "@/services/slackClient";
+import { downvoteArt, setSelectedArt, upvoteArt } from "data/artData";
 import {
   downvoteHeadline,
   setSelectedHeadline,
@@ -33,13 +34,13 @@ export const addInteraction = async (data) => {
       result = await setSelectedHeadline(id);
       break;
     case ACTION_UPVOTE_ART:
-      result = await upvoteHeadline(id);
+      result = await upvoteArt(id);
       break;
     case ACTION_DOWNVOTE_ART:
-      result = await downvoteHeadline(id);
+      result = await downvoteArt(id);
       break;
     case ACTION_SELECT_ART:
-      result = await setSelectedHeadline(id);
+      result = await setSelectedArt(id);
       break;
     default:
       throw new Error(`Unsupported action: ${action}`);

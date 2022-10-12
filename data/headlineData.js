@@ -144,7 +144,7 @@ export const getSelectedHeadline = async () => {
   const dbResponse = await faunaDbClient.query(
     query.Map(
       query.Paginate(
-        query.Match(query.Index("date-selected-index"), "2022-10-11", true),
+        query.Match(query.Index("date-selected-index"), getToday(), true),
       ),
       query.Lambda((x) => query.Get(x)),
     ),
