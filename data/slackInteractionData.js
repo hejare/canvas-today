@@ -50,7 +50,7 @@ export const addInteraction = async (data) => {
     setTimeout(async () => {
       try {
         await slackClient.post(response_url, {
-          body: { test: "Thanks for voting!" },
+          body: { text: "Thanks for voting!" },
         });
       } catch (e) {
         addLog({
