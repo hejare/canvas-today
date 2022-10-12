@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { backendClient } from "@/services/backendClient";
 
-
 const PageLinkContainer = styled.ul`
   flex-wrap: wrap;
   display: flex;
@@ -25,7 +24,9 @@ const LinkContainer = styled.ul`
 
 const LinkElement = ({ children, ...props }) => (
   <StyledLi>
-    <Link {...props}><StyledClicker>{children}</StyledClicker></Link>
+    <Link {...props}>
+      <StyledClicker>{children}</StyledClicker>
+    </Link>
   </StyledLi>
 );
 
@@ -46,7 +47,6 @@ const StyledLi = styled.li`
   margin: 4px;
   display: flex;
 `;
-
 
 export default function Home() {
   const [health, setHealth] = useState();
