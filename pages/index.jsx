@@ -8,6 +8,8 @@ import {
   STATUS_OK_TEXT,
   STATUS_UNKNOWN_TEXT,
 } from "@/services/responseConstants";
+import ArtImage from "components/molecules/ArtImage";
+import ImageCard from "components/molecules/ImageCard";
 
 const PageLinkContainer = styled.ul`
   flex-wrap: wrap;
@@ -91,7 +93,6 @@ export default function Home() {
     getArts();
   }, []);
 
-  console.log({ health });
   return (
     <div>
       <Head>
@@ -117,13 +118,18 @@ export default function Home() {
 
         <section>
           <h2>Latest Arts:</h2>
-          {arts.map(({ headline, votes, id, imageUrl, seed }) => (
-            <div key={id}>
-              <b>{headline}</b> ({seed}) [VOTES: {votes}]<br />
-              <img src={imageUrl} alt={headline} /> <br />
-              <br />
-              <br />
-            </div>
+          {arts.map(({ headline, votes, id, date, imageUrl, seed }) => (
+            <ImageCard key={id}>
+              <ImageCard.Heading>{headline}</ImageCard.Heading>
+              <ImageCard.Image>
+                <ArtImage imageUrl={imageUrl} alt={headline} size="available" />
+              </ImageCard.Image>
+              <ImageCard.PropsWrapper>
+                <ImageCard.Prop>{seed}</ImageCard.Prop>
+                <ImageCard.Prop>Votes: {votes}</ImageCard.Prop>
+                <ImageCard.Prop>{date}</ImageCard.Prop>
+              </ImageCard.PropsWrapper>
+            </ImageCard>
           ))}
         </section>
       </main>
