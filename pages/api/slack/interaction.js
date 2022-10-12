@@ -25,7 +25,11 @@ export default async function handler(req, res) {
       message = e;
     }
 
-    await addLog({ where: "api/slack/interaction", message: message, payload: JSON.parse(body.payload) });
+    await addLog({
+      where: "api/slack/interaction",
+      message: message,
+      payload: JSON.parse(body.payload),
+    });
     return res.status(500).json({
       status: "nok",
       error: message,
