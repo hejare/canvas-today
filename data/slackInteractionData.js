@@ -46,22 +46,23 @@ export const addInteraction = async (data) => {
       throw new Error(`Unsupported action: ${action}`);
   }
 
-  if (response_url) {
-    // Do this, but async:
-    setTimeout(async () => {
-      try {
-        await slackClient.post(response_url, {
-          body: { text: "Thanks for voting!" },
-        });
-      } catch (e) {
-        addLog({
-          where: "slackInteractionData/post response",
-          message: e.message,
-          response_url,
-        });
-      }
-    }, 500);
-  }
+  // Ignore this functionality for now - it replaces the vote-slack with the text sent to response_url
+  // if (response_url) {
+  //   // Do this, but async:
+  //   setTimeout(async () => {
+  //     try {
+  //       await slackClient.post(response_url, {
+  //         body: { text: "Thanks for voting!" },
+  //       });
+  //     } catch (e) {
+  //       addLog({
+  //         where: "slackInteractionData/post response",
+  //         message: e.message,
+  //         response_url,
+  //       });
+  //     }
+  //   }, 500);
+  // }
 
   const logResult = faunaDbClient.query(
     query.Create(query.Collection("slack-interaction"), {
