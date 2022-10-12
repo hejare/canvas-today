@@ -88,12 +88,12 @@ const typography = {
     },
   },
   main: {
-    border: "2px solid red",
+    border: "2px solid grey",
     padding: "8px",
     marginBottom: "32px",
   },
   section: {
-    border: "2px solid red",
+    border: "2px solid grey",
     padding: "8px",
     marginBottom: "32px",
   },

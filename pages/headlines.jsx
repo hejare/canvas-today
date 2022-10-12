@@ -17,7 +17,7 @@ export default function HeadlinesPage() {
   return (
     <div>
       <div>
-        <h1>HEADLINES:</h1>
+        <h1>TODAYS HEADLINES:</h1>
       </div>
       {headlines.map(({ headline, votes, selected, id }) => (
         <div key={id}>

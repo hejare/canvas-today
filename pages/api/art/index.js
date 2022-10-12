@@ -1,4 +1,5 @@
-import { getAllArts, getArtsToday } from "data/artData";
+import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
+import { getAllArts, getArtsToday, getSelectedArts } from "data/artData";
 
 export default async function handler(req, res) {
   const { method, query } = req;
@@ -11,14 +12,20 @@ export default async function handler(req, res) {
       //     : await addArt(body);
       //   break;
       case "GET":
-        data.result = query.today ? await getArtsToday() : await getAllArts();
+        if (query.today) {
+          data.result = await getArtsToday();
+        } else if (query.selected) {
+          data.result = await getSelectedArts();
+        } else {
+          data.result = await getArtsToday();
+        }
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);
     }
 
     res.status(200).json({
-      status: "ok",
+      status: STATUS_OK_TEXT,
       ...data,
     });
   } catch (e) {
@@ -28,7 +35,7 @@ export default async function handler(req, res) {
     }
 
     return res.status(500).json({
-      status: "nok",
+      status: STATUS_NOK_TEXT,
       error: message,
     });
   }

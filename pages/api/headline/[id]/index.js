@@ -1,3 +1,4 @@
+import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
 import { deleteHeadline, getHeadline, setHeadline } from "data/headlineData";
 
 export default async function handler(req, res) {
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
     }
 
     res.status(200).json({
-      status: "ok",
+      status: STATUS_OK_TEXT,
       ...data,
     });
   } catch (e) {
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
     }
 
     return res.status(500).json({
-      status: "nok",
+      status: STATUS_NOK_TEXT,
       error: message,
     });
   }

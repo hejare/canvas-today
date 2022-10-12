@@ -19,6 +19,7 @@ export const getArt = async (id) => {
   );
   return {
     ...dbResponse.data,
+    ts: dbResponse.ts,
     id: dbResponse.ref.id,
   };
 };
@@ -35,6 +36,7 @@ export const getArtsWithoutImageUrl = async () => {
 
   return dbResponse.data.map((d) => ({
     ...d.data,
+    ts: d.ts,
     id: d.ref.id,
   }));
 };
@@ -51,8 +53,24 @@ export const getArtsToday = async () => {
     .filter((d) => d.data.imageUrl !== "")
     .map((d) => ({
       ...d.data,
+      ts: d.ts,
       id: d.ref.id,
     }));
+};
+
+export const getSelectedArts = async () => {
+  const dbResponse = await faunaDbClient.query(
+    query.Map(
+      query.Paginate(query.Match(query.Index("art-selected-index"), true)),
+      query.Lambda((x) => query.Get(x)),
+    ),
+  );
+
+  return dbResponse.data.map((d) => ({
+    ...d.data,
+    ts: d.ts,
+    id: d.ref.id,
+  }));
 };
 
 export const getAllArts = async () => {
@@ -64,6 +82,7 @@ export const getAllArts = async () => {
   );
   return dbResponse.data.map((d) => ({
     ...d.data,
+    ts: d.ts,
     id: d.ref.id,
   }));
 };
@@ -115,6 +134,7 @@ export const getSelectedArt = async () => {
 
   return {
     ...dbResponse.data[0].data,
+    ts: dbResponse.data[0].ts,
     id: dbResponse.data[0].ref.id,
   };
 };

@@ -17,7 +17,7 @@ export default function ArtsPage() {
   return (
     <div>
       <div>
-        <h1>ARTS:</h1>
+        <h1>TODAYS ARTS:</h1>
       </div>
       {arts.map(({ headline, votes, selected, id, imageUrl, seed }) => (
         <div key={id}>

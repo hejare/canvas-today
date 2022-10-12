@@ -1,6 +1,7 @@
 import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { postVoteArtAction } from "@/lib/slack";
+import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
 import { getArtsToday } from "data/artData";
 import { addLog } from "data/logData";
 
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
     }
 
     res.status(200).json({
-      status: "ok",
+      status: STATUS_OK_TEXT,
       meta: meta,
     });
   } catch (e) {
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
       meta,
     });
     return res.status(500).json({
-      status: "nok",
+      status: STATUS_NOK_TEXT,
       error: message,
       meta: meta,
     });

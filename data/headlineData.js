@@ -12,7 +12,8 @@ export const getHeadlineStatus = async () => {
   return dbResponse.data.map((d) => {
     return {
       ...d.data,
-      ref: d.ref.id,
+      ts: d.ts,
+      id: d.ref.id,
     };
   });
 };
@@ -32,6 +33,7 @@ export const getAllHeadlines = async () => {
   );
   return dbResponse.data.map((d) => ({
     ...d.data,
+    ts: d.ts,
     id: d.ref.id,
   }));
 };
@@ -46,6 +48,7 @@ export const getHeadlinesToday = async () => {
 
   return dbResponse.data.map((d) => ({
     ...d.data,
+    ts: d.ts,
     id: d.ref.id,
   }));
 };
@@ -56,6 +59,7 @@ export const getHeadline = async (id) => {
   );
   return {
     ...dbResponse.data,
+    ts: dbResponse.ts,
     id: dbResponse.ref.id,
   };
 };
@@ -161,6 +165,7 @@ export const getSelectedHeadline = async () => {
 
   return {
     ...dbResponse.data[0].data,
+    ts: dbResponse.data[0].ts,
     id: dbResponse.data[0].ref.id,
   };
 };
