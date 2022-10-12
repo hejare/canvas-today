@@ -8,14 +8,14 @@ import {
   ACTION_UPVOTE_HEADLINE,
 } from "@/lib/slack";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
-import { slackClient } from "@/services/slackClient";
+// import { slackClient } from "@/services/slackClient";
 import { downvoteArt, setSelectedArt, upvoteArt } from "data/artData";
 import {
   downvoteHeadline,
   setSelectedHeadline,
   upvoteHeadline,
 } from "data/headlineData";
-import { addLog } from "data/logData";
+// import { addLog } from "data/logData";
 
 export const addInteraction = async (data) => {
   const { actions, response_url, user } = data;

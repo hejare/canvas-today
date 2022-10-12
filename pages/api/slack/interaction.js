@@ -1,4 +1,5 @@
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
+// import { getSelectedArt, setSelectedArt } from "data/artData";
 import { addLog } from "data/logData";
 import { addInteraction } from "data/slackInteractionData";
 
@@ -8,6 +9,11 @@ export default async function handler(req, res) {
   try {
     let data = {};
     switch (method) {
+      // Good for testing localy:
+      // case "GET":
+      //   const test = await getSelectedArt("345305552548528330");
+      //   console.log(test);
+      //   break;
       case "POST":
         data.result = await addInteraction(JSON.parse(body.payload));
         break;
