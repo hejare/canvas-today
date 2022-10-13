@@ -102,8 +102,9 @@ const base = {
   typography,
   transitions,
   breakpoints,
-  headerHeight: "60px",
+  headerHeight: "182px", // 150 + 32 (box-shadow)
   maxContentWidth: "640px",
+  maxOuterWidth: "1080px",
   zIndex: {
     backdrop: 2,
     dialog: 3,

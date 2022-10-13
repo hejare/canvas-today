@@ -1,11 +1,10 @@
 import styled from "styled-components";
 
 const StyledFooter = styled.footer`
-  border-top: 1px solid #ccc;
+  max-width: min(100vw, ${({ theme }) => theme.maxOuterWidth});
   display: flex;
   flex-direction: column;
   padding-bottom: 64px;
-  margin-top: 32px;
 `;
 
 const Footer = ({ children }) => <StyledFooter>{children}</StyledFooter>;

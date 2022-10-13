@@ -1,5 +1,6 @@
-import { backendClient } from "@/services/backendClient";
 import { useEffect, useState } from "react";
+import { backendClient } from "@/services/backendClient";
+import Layout from "components/Layout";
 
 export default function HeadlinesPage() {
   const [headlines, setHeadlines] = useState([]);
@@ -15,18 +16,21 @@ export default function HeadlinesPage() {
   }, []);
 
   return (
-    <div>
-      <div>
-        <h1>TODAYS HEADLINES:</h1>
-      </div>
-      {headlines.map(({ headline, votes, selected, id }) => (
-        <div key={id}>
-          <b>{headline}</b>
-          <br /> VOTES: [{votes}] SELECTED: {selected ? "TRUE" : "FALSE"}
-          <br />
-          <br />
-        </div>
-      ))}
-    </div>
+    <Layout
+      title="Canvas Today: Todays headlines!"
+      description="Each day, one headline from todays events will be voted fo, selected and
+        finally after some further evaluation - outputs the art of today."
+    >
+      <main>
+        {headlines.map(({ headline, votes, selected, id }) => (
+          <div key={id}>
+            <b>{headline}</b>
+            <br /> VOTES: [{votes}] SELECTED: {selected ? "TRUE" : "FALSE"}
+            <br />
+            <br />
+          </div>
+        ))}
+      </main>
+    </Layout>
   );
 }

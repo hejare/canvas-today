@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledHeader = styled.header`
-  border-bottom: 1px solid #ccc;
+  max-width: min(100vw, ${({ theme }) => theme.maxOuterWidth});
   display: flex;
   padding-bottom: 16px;
   justify-content: space-between;
