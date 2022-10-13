@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { backendClient } from "@/services/backendClient";
 import Layout from "components/Layout";
+import NewsHeadline from "components/molecules/NewsHeadline";
 
 export default function HeadlinesPage() {
   const [headlines, setHeadlines] = useState([]);
@@ -21,14 +22,17 @@ export default function HeadlinesPage() {
       description="Each day, one headline from todays events will be voted fo, selected and
         finally after some further evaluation - outputs the art of today."
     >
-      <main>
+      <main style={{ padding: 16 }}>
         {headlines.map(({ headline, votes, selected, id }) => (
-          <div key={id}>
-            <b>{headline}</b>
-            <br /> VOTES: [{votes}] SELECTED: {selected ? "TRUE" : "FALSE"}
-            <br />
-            <br />
-          </div>
+          <NewsHeadline key={id}>
+            <NewsHeadline.Heading>{headline}</NewsHeadline.Heading>
+            <NewsHeadline.PropsWrapper>
+              <NewsHeadline.Prop>Votes: {votes}</NewsHeadline.Prop>
+              <NewsHeadline.Prop active={!!selected}>
+                {selected ? "SELCTED" : "Not Selected"}
+              </NewsHeadline.Prop>
+            </NewsHeadline.PropsWrapper>
+          </NewsHeadline>
         ))}
       </main>
     </Layout>
