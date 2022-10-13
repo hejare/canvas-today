@@ -195,3 +195,20 @@ export const setSelectedHeadline = async (id) => {
   );
   return result;
 };
+
+export const unsetSelectedHeadline = async (id) => {
+  const result = {};
+  const headline = await getHeadline(id);
+  if (!headline.selected) {
+    return;
+  }
+
+  headline.selected = false;
+
+  result.dbResult = await faunaDbClient.query(
+    query.Update(query.Ref(query.Collection("headline"), id), {
+      data: headline,
+    }),
+  );
+  return result;
+};

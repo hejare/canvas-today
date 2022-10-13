@@ -1,3 +1,5 @@
+import SelectProp from "components/molecules/SelectProp";
+import VoteProp from "components/molecules/VoteProp";
 import styled from "styled-components";
 
 const StyledArticle = styled.article`
@@ -14,6 +16,7 @@ const NewsHeadline = ({ children }) => (
 );
 
 const StyledH2 = styled.h2`
+  text-align: left;
   padding: 0 16px;
   margin: 16px 0 0 0;
 `;
@@ -21,7 +24,9 @@ const StyledH2 = styled.h2`
 const Heading = ({ children }) => <StyledH2>{children}</StyledH2>;
 
 const StyledPropsDiv = styled.div`
-  padding: 0 16px 0 0;
+  padding: 0 0 0 0;
+  display: flex;
+  justify-content: right;
 `;
 
 const PropsWrapper = ({ children }) => (
@@ -45,12 +50,9 @@ const StyledPropSpan = styled.span`
   }}
 `;
 
-const Prop = ({ active, children }) => (
-  <StyledPropSpan active={active}>{children}</StyledPropSpan>
-);
-
 NewsHeadline.Heading = Heading;
 NewsHeadline.PropsWrapper = PropsWrapper;
-NewsHeadline.Prop = Prop;
+NewsHeadline.SelectProp = SelectProp;
+NewsHeadline.VoteProp = VoteProp;
 
 export default NewsHeadline;

@@ -30,7 +30,7 @@ const PageFooter = ({ healthStatus }) => (
         <div style={{ alignSelf: "center" }}>
           <Footer.Text>Here are most API endpoints currently used.</Footer.Text>
           <Footer.Disclaimer>
-            Be careful for navigating if you are not prepared for its effects
+            Be careful when navigating if you are not prepared for its effects
           </Footer.Disclaimer>
         </div>
       </Footer.Main>

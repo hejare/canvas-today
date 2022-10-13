@@ -23,14 +23,12 @@ export default function HeadlinesPage() {
         finally after some further evaluation - outputs the art of today."
     >
       <main style={{ padding: 16, textAlign: "-webkit-center" }}>
-        {headlines.map(({ headline, votes, selected, id }) => (
+        {headlines.map(({ headline, votes, selected, id }, idx) => (
           <NewsHeadline key={id}>
             <NewsHeadline.Heading>{headline}</NewsHeadline.Heading>
             <NewsHeadline.PropsWrapper>
-              <NewsHeadline.Prop>Votes: {votes}</NewsHeadline.Prop>
-              <NewsHeadline.Prop active={!!selected}>
-                {selected ? "SELCTED" : "Not Selected"}
-              </NewsHeadline.Prop>
+              <NewsHeadline.VoteProp id={id} votes={votes} />
+              <NewsHeadline.SelectProp id={id} selected={selected} />
             </NewsHeadline.PropsWrapper>
           </NewsHeadline>
         ))}
