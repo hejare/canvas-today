@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const StyledArticle = styled.article`
+  max-width: min(100vw, 450px);
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;

@@ -21,43 +21,6 @@ const transitions = {
   medium: "0.5s ease-out",
 };
 
-const buttonsShared = {
-  letterSpacing: "3px",
-  fontFamily: "Ano, sans-serif",
-  fontSize: "12px",
-  fontWeight: 900,
-  textTransform: "uppercase",
-  padding: "20px 40px",
-};
-
-const buttons = [
-  {
-    props: { variant: "contained" },
-    style: {
-      ...buttonsShared,
-    },
-  },
-  {
-    props: { variant: "outlined" },
-    style: {
-      ...buttonsShared,
-      border: "2px solid",
-      "&:hover": {
-        border: "2px solid",
-      },
-      "&:disabled": {
-        opacity: 0.5,
-      },
-    },
-  },
-  {
-    props: { variant: "text" },
-    style: {
-      ...buttonsShared,
-    },
-  },
-];
-
 const colors = {
   black: "#000000",
   darkGrey: "#181818",
@@ -78,52 +41,53 @@ const colors = {
 
 const typography = {
   body: {
-    fontFamily: "Gilroy-Regular",
-    fontSize: "10px",
-    lineHeight: "12px",
+    fontFamily: "Roboto-Regular",
+    // fontSize: "10px",
+    // lineHeight: "12px",
     letterSpacing: "0.46px",
     [breakpoints.desktop()]: {
-      fontSize: "12px",
-      lineHeight: "17px",
+      // fontSize: "12px",
+      // lineHeight: "17px",
     },
   },
   main: {
-    border: "2px solid grey",
-    padding: "8px",
-    marginBottom: "32px",
+    // padding: "8px",
+    // marginBottom: "32px",
   },
   section: {
-    border: "2px solid grey",
-    padding: "8px",
-    marginBottom: "32px",
+    // padding: "8px",
+    // marginBottom: "32px",
   },
   h1: {
-    letterSpacing: "0.05em",
-    fontSize: "40px",
-    lineHeight: "40px",
+    fontFamily: "Roboto-Black",
+    // letterSpacing: "0.05em",
+    // fontSize: "40px",
+    // lineHeight: "40px",
     [breakpoints.desktop()]: {
-      fontSize: "60px",
-      lineHeight: "60px",
+      // fontSize: "60px",
+      // lineHeight: "60px",
     },
   },
   h2: {
-    fontSize: "30px",
-    lineHeight: "30px",
-    letterSpacing: "0.05em",
+    fontFamily: "Roboto-Regular",
+    // fontSize: "30px",
+    // lineHeight: "30px",
+    // letterSpacing: "0.05em",
     [breakpoints.desktop()]: {
-      fontSize: "40px",
-      lineHeight: "40px",
+      // fontSize: "40px",
+      // lineHeight: "40px",
     },
   },
   h3: {
-    letterSpacing: "3px",
-    fontWeight: 900,
-    fontSize: "12px",
-    lineHeight: "12px",
+    fontFamily: "Roboto-Black",
+    // letterSpacing: "3px",
+    // fontWeight: 900,
+    // fontSize: "12px",
+    // lineHeight: "12px",
     textTransform: "uppercase",
     [breakpoints.desktop()]: {
-      fontSize: "12px",
-      lineHeight: "12px",
+      // fontSize: "12px",
+      // lineHeight: "12px",
     },
   },
   a: {
@@ -144,22 +108,8 @@ const base = {
     backdrop: 2,
     dialog: 3,
   },
-  padding: {
-    vertical: "30px",
-    horizontal: "60px",
-  },
   borders: {
     borderRadius: "4px",
-  },
-  components: {
-    MuiButton: {
-      variants: buttons,
-    },
-    MuiTableCell: {
-      styleOverrides: {
-        root: typography.body1, // since body2 is default by MUI
-      },
-    },
   },
 };
 

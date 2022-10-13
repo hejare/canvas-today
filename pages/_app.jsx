@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import "@/styles/globals.css";
+import "@/styles/fonts.css";
 import themes from "@/styles/themes";
 
 const theme = themes.dark; // I know, we are now removing ability to switch theme without hard reload, but what the hell...

@@ -10,34 +10,23 @@ import {
 } from "@/services/responseConstants";
 import ArtImage from "components/molecules/ArtImage";
 import ImageCard from "components/molecules/ImageCard";
+import Header from "components/molecules/Header";
+import Footer from "components/molecules/Footer";
 
-const PageLinkContainer = styled.ul`
-  flex-wrap: wrap;
-  display: flex;
-  border: 1px solid green;
-  margin: 10px;
-  text-align: left;
-  padding: 16px;
-`;
-
-const LinkContainer = styled.ul`
-  flex-wrap: wrap;
-  display: flex;
-  margin: 10px;
-  border: 1px solid red;
-  text-align: left;
-  padding: 16px;
-`;
-
-const LinkElement = ({ children, className, ...props }) => (
-  <StyledLi className={className}>
-    <Link {...props}>
-      <StyledClicker>{children}</StyledClicker>
-    </Link>
-  </StyledLi>
+const LinkElement = ({ children, status, ...props }) => (
+  <Link {...props}>
+    <StyledClicker status={status}>{children}</StyledClicker>
+  </Link>
 );
 
-const StyledLink = styled(LinkElement)`
+const StyledClicker = styled.span`
+  cursor: pointer;
+  white-space: nowrap;
+  &:hover {
+    text-decoration: underline;
+    background-color: #ff00ff;
+  }
+
   ${({ status }) => {
     if (!status) {
       return;
@@ -53,22 +42,12 @@ const StyledLink = styled(LinkElement)`
         return "background-color: #ffff00";
     }
   }};
-`;
 
-const StyledClicker = styled.span`
-  cursor: pointer;
-  white-space: nowrap;
-  &:hover {
-    text-decoration: underline;
-    background-color: #ff00ff;
-  }
+  align-self: center;
+  margin-top: 16px;
+  margin-left: 16px;
   padding: 16px;
   border: 1px solid orange;
-`;
-
-const StyledLi = styled.li`
-  margin: 4px;
-  display: flex;
 `;
 
 export default function Home() {
@@ -102,22 +81,26 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1>Welcome to Canvas Today!</h1>
-
-        <div>
-          Pages:
-          <PageLinkContainer>
-            <StyledLink href="/headlines">
+        <Header>
+          <Header.Main>
+            <Header.Heading>Welcome to Canvas Today!</Header.Heading>
+            <Header.Text>
+              Each day, one headline from todays events will be voted fo,
+              selected and finally after some further evaluation - outputs the
+              art of today.
+            </Header.Text>
+          </Header.Main>
+          <Header.Nav>
+            <LinkElement href="/headlines">
               <code>Headlines</code>
-            </StyledLink>
-            <StyledLink href="/arts">
+            </LinkElement>
+            <LinkElement href="/arts">
               <code>Arts</code>
-            </StyledLink>
-          </PageLinkContainer>
-        </div>
+            </LinkElement>
+          </Header.Nav>
+        </Header>
 
-        <section>
-          <h2>Latest Arts:</h2>
+        <section style={{ textAlign: "-webkit-center", marginTop: 16 }}>
           {arts.map(({ headline, votes, id, date, imageUrl, seed }) => (
             <ImageCard key={id}>
               <ImageCard.Heading>{headline}</ImageCard.Heading>
@@ -133,38 +116,47 @@ export default function Home() {
           ))}
         </section>
       </main>
-      <section>
-        (Be careful for navigating to api-endpoints)
-        <LinkContainer>
-          <StyledLink href="/api/health" status={health.status}>
+      <Footer>
+        <Footer.Main>
+          <Footer.Heading>Canvas Today</Footer.Heading>
+          <div>
+            <Footer.Text>
+              Here are most API endpoints currently used.
+            </Footer.Text>
+            <Footer.Disclaimer>
+              Be careful for navigating if you are not prepared for its effects
+            </Footer.Disclaimer>
+          </div>
+        </Footer.Main>
+        <Footer.Nav>
+          <LinkElement href="/api/health" status={health.status}>
             <code>api/health</code>
-          </StyledLink>
+          </LinkElement>
 
-          <StyledLink href="/api/headline">
+          <LinkElement href="/api/headline">
             <code>api/headline</code>
-          </StyledLink>
-          <StyledLink href="/api/headline/aggregate">
+          </LinkElement>
+          <LinkElement href="/api/headline/aggregate">
             <code>api/headline/aggregate</code>
-          </StyledLink>
-          <StyledLink href="/api/headline/slack-action-vote">
+          </LinkElement>
+          <LinkElement href="/api/headline/slack-action-vote">
             <code>api/headline/slack-action-vote</code>
-          </StyledLink>
-          <StyledLink href="/api/headline/slack-action-select">
+          </LinkElement>
+          <LinkElement href="/api/headline/slack-action-select">
             <code>api/headline/slack-action-select</code>
-          </StyledLink>
+          </LinkElement>
 
-          <StyledLink href="/api/art">
+          <LinkElement href="/api/art">
             <code>api/art</code>
-          </StyledLink>
-          <StyledLink href="/api/art/slack-action-vote">
+          </LinkElement>
+          <LinkElement href="/api/art/slack-action-vote">
             <code>api/art/slack-action-vote</code>
-          </StyledLink>
-          <StyledLink href="/api/art/slack-action-select">
+          </LinkElement>
+          <LinkElement href="/api/art/slack-action-select">
             <code>api/art/slack-action-select</code>
-          </StyledLink>
-        </LinkContainer>
-      </section>
-      {/* <section>Status: {health?.status}</section> */}
+          </LinkElement>
+        </Footer.Nav>
+      </Footer>
     </div>
   );
 }
