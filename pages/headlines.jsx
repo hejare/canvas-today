@@ -22,7 +22,7 @@ export default function HeadlinesPage() {
       description="Each day, one headline from todays events will be voted fo, selected and
         finally after some further evaluation - outputs the art of today."
     >
-      <main style={{ padding: 16 }}>
+      <main style={{ padding: 16, textAlign: "-webkit-center" }}>
         {headlines.map(({ headline, votes, selected, id }) => (
           <NewsHeadline key={id}>
             <NewsHeadline.Heading>{headline}</NewsHeadline.Heading>

@@ -23,7 +23,7 @@ export default function Home() {
       description="Each day, one headline from todays events will be voted fo, selected and
         finally after some further evaluation - outputs the art of today."
     >
-      <main>
+      <main style={{ padding: 16 }}>
         <section style={{ textAlign: "-webkit-center", marginTop: 16 }}>
           {arts.map(({ headline, votes, id, date, imageUrl, seed }) => (
             <ImageCard key={id}>

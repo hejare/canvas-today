@@ -5,6 +5,7 @@ const StyledArticle = styled.article`
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
+  margin-top: 16px;
   padding-bottom: 16px;
 `;
 
@@ -40,9 +41,19 @@ const StyledPropSpan = styled.span`
   padding: 16px;
   margin-top: 16px;
   margin-left: 16px;
+  ${({ theme, active }) => {
+    if (active) {
+      return `
+      background-color: ${theme.palette.background.active};
+      color: ${theme.palette.text.active};
+      `;
+    }
+  }}
 `;
 
-const Prop = ({ children }) => <StyledPropSpan>{children}</StyledPropSpan>;
+const Prop = ({ active, children }) => (
+  <StyledPropSpan active={active}>{children}</StyledPropSpan>
+);
 
 ImageCard.Heading = Heading;
 ImageCard.Image = ImageWrapper;
