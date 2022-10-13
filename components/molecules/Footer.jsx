@@ -11,17 +11,15 @@ const Footer = ({ children }) => <StyledFooter>{children}</StyledFooter>;
 
 const StyledMain = styled.main`
   display: flex;
-  /* flex-direction: column; */
 `;
 
 const Main = ({ children }) => <StyledMain>{children}</StyledMain>;
 
-const StyledH1 = styled.h1`
+const StyledH2 = styled.h2`
   padding: 0 16px;
-  margin: 16px 0 0 0;
 `;
 
-const Heading = ({ children }) => <StyledH1>{children}</StyledH1>;
+const Heading = ({ children }) => <StyledH2>{children}</StyledH2>;
 
 const StyledTextDiv = styled.div`
   margin-top: 16px;

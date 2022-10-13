@@ -11,12 +11,23 @@ const FooterWrapper = styled.div`
   place-content: center;
 `;
 
+const StyledNavLink = styled(NavLink)`
+  border: none;
+  margin-top: 0;
+  position: relative;
+  left: -32px;
+  display: block;
+  white-space: normal;
+`;
+
 const PageFooter = ({ healthStatus }) => (
   <FooterWrapper>
     <Footer>
       <Footer.Main>
-        <Footer.Heading>Canvas Today</Footer.Heading>
-        <div>
+        <Footer.Heading>
+          <StyledNavLink href="/">Canvas Today</StyledNavLink>
+        </Footer.Heading>
+        <div style={{ alignSelf: "center" }}>
           <Footer.Text>Here are most API endpoints currently used.</Footer.Text>
           <Footer.Disclaimer>
             Be careful for navigating if you are not prepared for its effects

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 
 const HeaderWrapper = styled.div`
+  z-index: ${({ theme }) => theme.zIndex.header};
   position: fixed;
   display: flex;
   place-content: center;
@@ -17,7 +18,8 @@ const StyledNavLink = styled(NavLink)`
   border: none;
   position: relative;
   left: -32px;
-  /* margin-left: 0; */
+  display: block;
+  white-space: normal;
 `;
 
 const PageHeader = ({ title, description }) => {

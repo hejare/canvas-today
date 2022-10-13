@@ -69,7 +69,7 @@ const typography = {
     },
   },
   h2: {
-    fontFamily: "Roboto-Regular",
+    fontFamily: "Roboto-Black",
     // fontSize: "30px",
     // lineHeight: "30px",
     // letterSpacing: "0.05em",
@@ -102,10 +102,11 @@ const base = {
   typography,
   transitions,
   breakpoints,
-  headerHeight: "182px", // 150 + 32 (box-shadow)
+  headerHeight: "232px", // 200 + 32 (box-shadow)
   maxContentWidth: "640px",
   maxOuterWidth: "1080px",
   zIndex: {
+    header: 10,
     backdrop: 2,
     dialog: 3,
   },
