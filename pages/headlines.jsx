@@ -11,6 +11,7 @@ import useInterval from "@/hooks/useInterval";
 
 export default function HeadlinesPage() {
   const [headlines, setHeadlines] = useState([]);
+  const [selectedId, setSelectedId] = useState();
   const [votingEnded, setVotingEnded] = useState(
     isTimePassed(PROCESS_HEADLINE_VOTE_ENDTIME),
   );
@@ -41,7 +42,16 @@ export default function HeadlinesPage() {
       const response = await backendClient.get("headline", {
         params: { today: "1" },
       });
-      setHeadlines(response.result.sort((a, b) => b.votes - a.votes));
+      const fetchedHeadlines = response.result.sort(
+        (a, b) => b.votes - a.votes,
+      );
+      const selectedHeadline = fetchedHeadlines.find(
+        (fetchedHeadline) => fetchedHeadline.selected,
+      );
+      if (selectedHeadline) {
+        setSelectedId(selectedHeadline.id);
+      }
+      setHeadlines(fetchedHeadlines);
     }
     getHeadlines();
   }, []);
@@ -62,7 +72,7 @@ export default function HeadlinesPage() {
           Todays voting is open until {PROCESS_HEADLINE_VOTE_ENDTIME}, and the
           ability to select ends {PROCESS_HEADLINE_SELECT_ENDTIME}
         </div>
-        {headlines.map(({ headline, votes, selected, id }) => (
+        {headlines.map(({ headline, votes, id }) => (
           <NewsHeadline key={id}>
             <NewsHeadline.Heading>{headline}</NewsHeadline.Heading>
             <NewsHeadline.PropsWrapper>
@@ -75,8 +85,9 @@ export default function HeadlinesPage() {
               <NewsHeadline.SelectProp
                 type="headline"
                 id={id}
-                selected={selected}
+                selected={selectedId === id}
                 closed={selectingEnded}
+                onSelect={setSelectedId}
               />
             </NewsHeadline.PropsWrapper>
           </NewsHeadline>

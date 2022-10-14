@@ -72,16 +72,7 @@ const Circle = styled.div`
   }
 `;
 
-const SelectProp = ({
-  id,
-  selected: initialSelected,
-  closed,
-  type,
-  onSelect,
-  className,
-}) => {
-  const [selected, setSelected] = useState(initialSelected);
-
+const SelectProp = ({ id, selected, closed, type, onSelect, className }) => {
   const onClick = async (e) => {
     e.preventDefault();
     if (closed) {
@@ -92,8 +83,7 @@ const SelectProp = ({
     } else {
       await backendClient.get(`${type}/${id}/select`);
     }
-    setSelected(!selected);
-    typeof onSelect === "function" && onSelect(id);
+    typeof onSelect === "function" && onSelect(selected ? null : id);
   };
 
   return (

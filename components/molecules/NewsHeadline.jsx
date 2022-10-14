@@ -26,7 +26,6 @@ const Heading = ({ children }) => <StyledH2>{children}</StyledH2>;
 const StyledPropsDiv = styled.div`
   padding: 0 0 0 0;
   display: flex;
-  justify-content: right;
 `;
 
 const PropsWrapper = ({ children }) => (
@@ -50,9 +49,19 @@ const StyledPropSpan = styled.span`
   }}
 `;
 
+const StyledSelectProp = styled(SelectProp)`
+  margin-top: 16px;
+  margin-left: 16px;
+`;
+
+const StyledVoteProp = styled(VoteProp)`
+  margin-top: 16px;
+  margin-left: 16px;
+`;
+
 NewsHeadline.Heading = Heading;
 NewsHeadline.PropsWrapper = PropsWrapper;
-NewsHeadline.SelectProp = SelectProp;
-NewsHeadline.VoteProp = VoteProp;
+NewsHeadline.SelectProp = StyledSelectProp;
+NewsHeadline.VoteProp = StyledVoteProp;
 
 export default NewsHeadline;
