@@ -1,3 +1,5 @@
+import Button from "@/components/atoms/Button";
+import NavLink from "@/components/molecules/NavLink";
 import SelectProp from "@/components/molecules/SelectProp";
 import VoteProp from "@/components/molecules/VoteProp";
 import styled from "styled-components";
@@ -30,6 +32,8 @@ const ImageWrapper = ({ children }) => (
 
 const StyledPropsDiv = styled.div`
   padding: 0 16px 0 0;
+  display: flex;
+  flex-flow: wrap;
 `;
 
 const PropsWrapper = ({ children }) => (
@@ -57,11 +61,51 @@ const Prop = ({ active, children }) => (
   <StyledPropSpan active={active}>{children}</StyledPropSpan>
 );
 
+const StyledButton = styled(Button)`
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #009900;
+  padding: 16px;
+  margin-top: 16px;
+  margin-left: 16px;
+  ${({ theme, active }) => {
+    if (active) {
+      return `
+      background-color: ${theme.palette.background.active};
+      color: ${theme.palette.text.active};
+      `;
+    }
+  }}
+`;
+
+const ButtonProp = ({ active, children }) => (
+  <StyledButton active={active}>{children}</StyledButton>
+);
+
+const StyledNavLink = styled(NavLink)`
+  font-family: unset;
+  margin-top: 16px;
+  margin-left: 16px;
+`;
+
+const StyledSelectProp = styled(SelectProp)`
+  margin-top: 16px;
+  margin-left: 16px;
+`;
+
+const StyledVoteProp = styled(VoteProp)`
+  margin-top: 16px;
+  margin-left: 16px;
+`;
+
 ImageCard.Heading = Heading;
 ImageCard.Image = ImageWrapper;
 ImageCard.PropsWrapper = PropsWrapper;
-ImageCard.SelectProp = SelectProp;
-ImageCard.VoteProp = VoteProp;
+ImageCard.SelectProp = StyledSelectProp;
+ImageCard.VoteProp = StyledVoteProp;
+ImageCard.ButtonProp = ButtonProp;
+ImageCard.NavProp = StyledNavLink;
 ImageCard.Prop = Prop;
 
 export default ImageCard;

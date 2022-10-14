@@ -12,6 +12,7 @@ import { useInterval } from "usehooks-ts";
 
 export default function ArtsPage() {
   const [arts, setArts] = useState([]);
+  const [selectedId, setSelectedId] = useState();
   const [votingEnded, setVotingEnded] = useState(
     isTimePassed(PROCESS_ART_VOTE_ENDTIME),
   );
@@ -42,7 +43,12 @@ export default function ArtsPage() {
       const response = await backendClient.get("art", {
         params: { today: "1" },
       });
-      setArts(response.result.sort((a, b) => b.votes - a.votes));
+      const fetchedArts = response.result.sort((a, b) => b.votes - a.votes);
+      const selectedArt = fetchedArts.find((fetchedArt) => fetchedArt.selected);
+      if (selectedArt) {
+        setSelectedId(selectedArt.id);
+      }
+      setArts(fetchedArts);
     }
     getArts();
   }, []);
@@ -63,7 +69,7 @@ export default function ArtsPage() {
           Todays voting is open until {PROCESS_ART_VOTE_ENDTIME}, and the
           ability to select ends {PROCESS_ART_SELECT_ENDTIME}
         </div>
-        {arts.map(({ headline, votes, selected, id, imageUrl, seed }) => (
+        {arts.map(({ headline, votes, id, imageUrl, seed }) => (
           <ImageCard key={id}>
             <ImageCard.Heading>{headline}</ImageCard.Heading>
             <ImageCard.Image>
@@ -80,8 +86,9 @@ export default function ArtsPage() {
               <ImageCard.SelectProp
                 type="art"
                 id={id}
-                selected={selected}
+                selected={selectedId === id}
                 closed={selectingEnded}
+                onSelect={setSelectedId}
               />
             </ImageCard.PropsWrapper>
           </ImageCard>

@@ -13,7 +13,6 @@ const Icon = ({ name, className, fill, ...props }) => {
       <IconComponent
         className={className}
         fill={fill || theme.palette.action.text}
-        fillSecondary={theme.palette.action.text}
         {...props}
       />
     );

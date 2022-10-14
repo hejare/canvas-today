@@ -6,8 +6,6 @@ import styled from "styled-components";
 
 const VoteWrapper = styled.div`
   display: flex;
-  margin-top: 16px;
-  margin-right: 16px;
   border: 1px solid green;
   height: 64px;
   width: 100px;
@@ -74,7 +72,14 @@ const Circle = styled.div`
   }
 `;
 
-const SelectProp = ({ id, selected: initialSelected, closed, type }) => {
+const SelectProp = ({
+  id,
+  selected: initialSelected,
+  closed,
+  type,
+  onSelect,
+  className,
+}) => {
   const [selected, setSelected] = useState(initialSelected);
 
   const onClick = async (e) => {
@@ -88,10 +93,11 @@ const SelectProp = ({ id, selected: initialSelected, closed, type }) => {
       await backendClient.get(`${type}/${id}/select`);
     }
     setSelected(!selected);
+    typeof onSelect === "function" && onSelect(id);
   };
 
   return (
-    <VoteWrapper closed={closed}>
+    <VoteWrapper closed={closed} className={className}>
       {!closed && (
         <Selecter>
           <IconButton onClick={onClick}>

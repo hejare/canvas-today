@@ -35,6 +35,7 @@ export default function Home() {
                 <ImageCard.Prop>{seed}</ImageCard.Prop>
                 <ImageCard.Prop>Votes: {votes}</ImageCard.Prop>
                 <ImageCard.Prop>{date}</ImageCard.Prop>
+                <ImageCard.NavProp href={`/art/${id}`}>NFT</ImageCard.NavProp>
               </ImageCard.PropsWrapper>
             </ImageCard>
           ))}

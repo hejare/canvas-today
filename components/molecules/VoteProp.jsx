@@ -7,8 +7,6 @@ import styled from "styled-components";
 
 const VoteWrapper = styled.div`
   display: flex;
-  margin-top: 16px;
-  margin-right: 16px;
   border: 1px solid green;
   height: 64px;
   width: 100px;
@@ -55,7 +53,7 @@ const StyledPropSpan = styled.span`
   padding: 16px;
 `;
 
-const VoteProp = ({ id, votes: initialVotes, closed, type }) => {
+const VoteProp = ({ id, votes: initialVotes, closed, type, className }) => {
   const [votes, setVotes] = useState(parseInt(initialVotes, 10));
   const voteUp = async (e) => {
     e.preventDefault();
@@ -75,7 +73,7 @@ const VoteProp = ({ id, votes: initialVotes, closed, type }) => {
   };
 
   return (
-    <VoteWrapper closed={closed}>
+    <VoteWrapper closed={closed} className={className}>
       {!closed && (
         <Voter>
           <IconButton onClick={voteUp}>

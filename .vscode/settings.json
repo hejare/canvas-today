@@ -46,5 +46,6 @@
     "titleBar.inactiveForeground": "#e7e7e799"
   },
   "javascript.preferences.importModuleSpecifier": "non-relative",
-  "peacock.color": "#1a1a1a"
+  "peacock.color": "#1a1a1a",
+  "svg.preview.background": "transparent"
 }

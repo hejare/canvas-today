@@ -1,0 +1,38 @@
+{
+  "name": "Canvas Today",
+  "short_name": "CanvasToday",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FF583B",
+  "theme_color": "#FF583B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/letterc.svg",
+      "type": "image/svg+xml",
+      "sizes": "150x150"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mint the art",
+      "short_name": "Create NFT",
+      "description": "Create a new NFT",
+      "url": "/nft/new?referrer=pwa",
+      "icons": [
+        {
+          "src": "/letterc.svg",
+          "sizes": "150x150"
+        }
+      ]
+    }
+  ],
+  "description": "Create a new NFT",
+  "screenshots": [
+    {
+      "src": "/letterc.svg",
+      "type": "image/svg+xml",
+      "sizes": "150x150"
+    }
+  ]
+}

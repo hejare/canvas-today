@@ -98,7 +98,7 @@ function Layout({ children, title, description }) {
   return (
     <>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/letterc.svg" />
         <title>{title}</title>
         <meta name="description" content={description} />
         <meta
