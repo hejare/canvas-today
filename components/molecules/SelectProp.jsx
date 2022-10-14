@@ -74,10 +74,13 @@ const Circle = styled.div`
   }
 `;
 
-const SelectProp = ({ id, selected: initialSelected }) => {
+const SelectProp = ({ id, selected: initialSelected, closed }) => {
   const [selected, setSelected] = useState(initialSelected);
   const onClick = async (e) => {
     e.preventDefault();
+    if (closed) {
+      return;
+    }
     if (selected) {
       await backendClient.delete(`headline/${id}/select`);
     } else {
@@ -87,15 +90,22 @@ const SelectProp = ({ id, selected: initialSelected }) => {
   };
 
   return (
-    <VoteWrapper>
-      <Selecter>
-        <IconButton onClick={onClick}>
-          {selected && (
-            <StyledIcon name="checked" fill="#00ff00" width="24" height="24" />
-          )}
-          <Circle color={selected ? "#00ff00" : "#ff0000"} />
-        </IconButton>
-      </Selecter>
+    <VoteWrapper closed={closed}>
+      {!closed && (
+        <Selecter>
+          <IconButton onClick={onClick}>
+            {selected && (
+              <StyledIcon
+                name="checked"
+                fill="#00ff00"
+                width="24"
+                height="24"
+              />
+            )}
+            <Circle color={selected ? "#00ff00" : "#ff0000"} />
+          </IconButton>
+        </Selecter>
+      )}
 
       <StyledPropSpan>{selected ? "SELECTED" : "NOT SELECTED"}</StyledPropSpan>
     </VoteWrapper>

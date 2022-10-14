@@ -56,8 +56,16 @@ export default function HeadlinesPage() {
           <NewsHeadline key={id}>
             <NewsHeadline.Heading>{headline}</NewsHeadline.Heading>
             <NewsHeadline.PropsWrapper>
-              <NewsHeadline.VoteProp id={id} votes={votes} />
-              <NewsHeadline.SelectProp id={id} selected={selected} />
+              <NewsHeadline.VoteProp
+                id={id}
+                votes={votes}
+                closed={votingEnded}
+              />
+              <NewsHeadline.SelectProp
+                id={id}
+                selected={selected}
+                closed={selectingEnded}
+              />
             </NewsHeadline.PropsWrapper>
           </NewsHeadline>
         ))}

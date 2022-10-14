@@ -19,7 +19,7 @@ const VoteWrapper = styled.div`
   background-color: none;
   transition: background-color 0.3s ease-out;
   :hover {
-    background-color: white;
+    background-color: ${({ closed }) => (closed ? "inherit" : "white")};
   }
 
   div {
@@ -55,29 +55,37 @@ const StyledPropSpan = styled.span`
   padding: 16px;
 `;
 
-const VoteProp = ({ id, votes: initialVotes }) => {
+const VoteProp = ({ id, votes: initialVotes, closed }) => {
   const [votes, setVotes] = useState(parseInt(initialVotes, 10));
   const voteUp = async (e) => {
     e.preventDefault();
+    if (closed) {
+      return;
+    }
     await backendClient.get(`headline/${id}/upvote`);
     setVotes(votes + 1);
   };
 
   const voteDown = () => {
+    if (closed) {
+      return;
+    }
     backendClient.get(`headline/${id}/downvote`);
     setVotes(votes - 1);
   };
 
   return (
-    <VoteWrapper>
-      <Voter>
-        <IconButton onClick={voteUp}>
-          <ThumbUpIcon />
-        </IconButton>
-        <IconButton onClick={voteDown}>
-          <ThumbDownIcon />
-        </IconButton>
-      </Voter>
+    <VoteWrapper closed={closed}>
+      {!closed && (
+        <Voter>
+          <IconButton onClick={voteUp}>
+            <ThumbUpIcon />
+          </IconButton>
+          <IconButton onClick={voteDown}>
+            <ThumbDownIcon />
+          </IconButton>
+        </Voter>
+      )}
       <StyledPropSpan>
         {votes}
         {votes < 0 ? <ThumbDownIcon /> : <ThumbUpIcon />}
