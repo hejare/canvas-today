@@ -50,9 +50,8 @@ export default function HeadlinesPage() {
 
   return (
     <Layout
-      title="Canvas Today: Todays headlines!"
-      description="Each day, one headline from todays events will be voted fo, selected and
-        finally after some further evaluation - outputs the art of today."
+      title="Headlines"
+      description="Current headlines from todays events are listed below. Voting and ultimately, selecting one of these - outputs versions of arts."
     >
       <main style={{ padding: 16, textAlign: "-webkit-center" }}>
         {votingEnded && (

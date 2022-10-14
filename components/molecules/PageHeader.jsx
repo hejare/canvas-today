@@ -2,6 +2,7 @@ import Header from "@/components/molecules/Header";
 import NavLink from "@/components/molecules/NavLink";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import useScrollPosition from "@react-hook/window-scroll";
 
 const HeaderWrapper = styled.div`
   z-index: ${({ theme }) => theme.zIndex.header};
@@ -24,24 +25,37 @@ const StyledNavLink = styled(NavLink)`
 
 const PageHeader = ({ title, description }) => {
   const router = useRouter();
+  const scrollY = useScrollPosition(60 /*fps*/);
 
+  const hideText = scrollY > 100;
+  const minimize = scrollY > 300;
+  const hideNav = minimize;
   return (
     <HeaderWrapper>
-      <Header>
+      <Header minimize={minimize}>
         <Header.Main>
-          <Header.Heading>
-            <StyledNavLink href="/">{title}</StyledNavLink>
+          <Header.SupHeading minimize={minimize}>
+            Canvas Today:
+          </Header.SupHeading>
+          <Header.Heading minimize={minimize}>
+            {title}
+            {/* <StyledNavLink href="/">{title}</StyledNavLink> */}
           </Header.Heading>
-          <Header.Text>{description}</Header.Text>
+          {!hideText && <Header.Text>{description}</Header.Text>}
         </Header.Main>
-        <Header.Nav>
-          <NavLink href="/headlines" active={router.pathname === "/headlines"}>
-            <code>Headlines</code>
-          </NavLink>
-          <NavLink href="/arts" active={router.pathname === "/arts"}>
-            <code>Arts</code>
-          </NavLink>
-        </Header.Nav>
+        {!hideNav && (
+          <Header.Nav>
+            <NavLink
+              href="/headlines"
+              active={router.pathname === "/headlines"}
+            >
+              <code>Headlines</code>
+            </NavLink>
+            <NavLink href="/arts" active={router.pathname === "/arts"}>
+              <code>Arts</code>
+            </NavLink>
+          </Header.Nav>
+        )}
       </Header>
     </HeaderWrapper>
   );

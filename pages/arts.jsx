@@ -19,9 +19,8 @@ export default function ArtsPage() {
 
   return (
     <Layout
-      title="Canvas Today: Todays arts!"
-      description="Each day, one headline from todays events will be voted fo, selected and
-        finally after some further evaluation - outputs the art of today."
+      title="Arts"
+      description="Todays selected headline will output arts to this page, for some evaluation before being defined as Todays Art!"
     >
       <main style={{ padding: 16, textAlign: "-webkit-center" }}>
         {arts.map(({ headline, votes, selected, id, imageUrl, seed }) => (

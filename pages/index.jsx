@@ -19,8 +19,8 @@ export default function Home() {
 
   return (
     <Layout
-      title="Welcome to Canvas Today!"
-      description="Each day, one headline from todays events will be voted fo, selected and
+      title="Finalized arts"
+      description="Welcome to Canvas Today! Each day, one headline from todays events will be voted fo, selected and
         finally after some further evaluation - outputs the art of today."
     >
       <main style={{ padding: 16 }}>

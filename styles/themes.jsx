@@ -102,7 +102,7 @@ const base = {
   typography,
   transitions,
   breakpoints,
-  headerHeight: "232px", // 200 + 32 (box-shadow)
+  headerHeight: "200px", // 168 + 32 (box-shadow)
   maxContentWidth: "640px",
   maxOuterWidth: "1080px",
   zIndex: {
