@@ -16,11 +16,15 @@ const HeaderWrapper = styled.div`
 `;
 
 const StyledNavLink = styled(NavLink)`
-  border: none;
-  position: relative;
-  left: -32px;
-  display: block;
-  white-space: normal;
+  ${({ minimize }) =>
+    minimize
+      ? `
+    border: none;
+    white-space: normal;
+    padding: 2px 4px;
+    margin-top: 4px;
+  `
+      : ""}
 `;
 
 const PageHeader = ({ title, description }) => {
@@ -29,7 +33,7 @@ const PageHeader = ({ title, description }) => {
 
   const hideText = scrollY > 100;
   const minimize = scrollY > 300;
-  const hideNav = minimize;
+  const minimizeNavButton = minimize;
   return (
     <HeaderWrapper>
       <Header minimize={minimize}>
@@ -41,21 +45,24 @@ const PageHeader = ({ title, description }) => {
             {title}
             {/* <StyledNavLink href="/">{title}</StyledNavLink> */}
           </Header.Heading>
-          {!hideText && <Header.Text>{description}</Header.Text>}
+          <Header.Text minimize={hideText}>{description}</Header.Text>
         </Header.Main>
-        {!hideNav && (
-          <Header.Nav>
-            <NavLink
-              href="/headlines"
-              active={router.pathname === "/headlines"}
-            >
-              <code>Headlines</code>
-            </NavLink>
-            <NavLink href="/arts" active={router.pathname === "/arts"}>
-              <code>Arts</code>
-            </NavLink>
-          </Header.Nav>
-        )}
+        <Header.Nav minimize={minimize}>
+          <StyledNavLink
+            href="/headlines"
+            active={router.pathname === "/headlines"}
+            minimize={minimizeNavButton}
+          >
+            <code>Headlines</code>
+          </StyledNavLink>
+          <StyledNavLink
+            href="/arts"
+            active={router.pathname === "/arts"}
+            minimize={minimizeNavButton}
+          >
+            <code>Arts</code>
+          </StyledNavLink>
+        </Header.Nav>
       </Header>
     </HeaderWrapper>
   );

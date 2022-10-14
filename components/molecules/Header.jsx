@@ -6,6 +6,7 @@ const StyledHeader = styled.header`
   /* ${({ theme }) => theme.breakpoints.desktop`
     max-width: min(100vw, ${({ theme }) => theme.maxOuterWidth});
   `} */
+  overflow: hidden;
   display: flex;
   padding-bottom: 16px;
   justify-content: space-between;
@@ -53,18 +54,23 @@ const Heading = ({ children, minimize }) => (
 const StyledTextDiv = styled.div`
   margin-top: 16px;
   padding-left: 16px;
+  transform-origin: top;
+  transition: transform 0.26s ease;
+  /* transform: ${({ minimize }) => (minimize ? "scaleY(0)" : "scaleY(1)")}; */
+  display: ${({ minimize }) => (minimize ? "none" : "block")};
 `;
 
-const TextWrapper = ({ children }) => <StyledTextDiv>{children}</StyledTextDiv>;
+const TextWrapper = ({ children, minimize }) => (
+  <StyledTextDiv minimize={minimize}>{children}</StyledTextDiv>
+);
 
 const StyledNav = styled.nav`
   display: flex;
   justify-content: right;
   margin: 0;
   padding-right: 16px;
-  flex-wrap: wrap;
   margin-bottom: auto;
-  ${({ minimize }) => (minimize ? "transform: scale(0.4, 0.4);" : "")}
+  ${({ minimize }) => (minimize ? "" : "flex-wrap: wrap;")}
 `;
 
 const NavigationWrapper = ({ children, minimize }) => (
