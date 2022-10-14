@@ -163,3 +163,20 @@ export const setSelectedArt = async (id) => {
   );
   return result;
 };
+
+export const unsetSelectedArt = async (id) => {
+  const result = {};
+  const art = await getArt(id);
+  if (!art.selected) {
+    return;
+  }
+
+  art.selected = false;
+
+  result.dbResult = await faunaDbClient.query(
+    query.Update(query.Ref(query.Collection("art"), id), {
+      data: art,
+    }),
+  );
+  return result;
+};

@@ -18,7 +18,7 @@ const VoteWrapper = styled.div`
   background-color: none;
   transition: background-color 0.3s ease-out;
   :hover {
-    background-color: white;
+    background-color: ${({ closed }) => (closed ? "inherit" : "white")};
   }
 
   div {

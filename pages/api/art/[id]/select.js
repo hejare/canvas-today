@@ -1,7 +1,7 @@
 import { isTimePassed } from "@/lib/common";
-import { PROCESS_HEADLINE_SELECT_ENDTIME } from "@/lib/slack";
+import { PROCESS_ART_SELECT_ENDTIME } from "@/lib/slack";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { setSelectedHeadline, unsetSelectedHeadline } from "data/headlineData";
+import { setSelectedArt, unsetSelectedArt } from "data/artData";
 
 export default async function handler(req, res) {
   const { method, query } = req;
@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   try {
     let data = {};
 
-    if (isTimePassed(PROCESS_HEADLINE_SELECT_ENDTIME)) {
+    if (isTimePassed(PROCESS_ART_SELECT_ENDTIME)) {
       return res.status(401).json({
         status: STATUS_NOK_TEXT,
         message: "Selecting is closed for today",
@@ -18,10 +18,10 @@ export default async function handler(req, res) {
 
     switch (method) {
       case "GET":
-        data.result = await setSelectedHeadline(id);
+        data.result = await setSelectedArt(id);
         break;
       case "DELETE":
-        data.result = await unsetSelectedHeadline(id);
+        data.result = await unsetSelectedArt(id);
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

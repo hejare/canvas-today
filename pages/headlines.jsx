@@ -6,15 +6,10 @@ import {
   PROCESS_HEADLINE_SELECT_ENDTIME,
   PROCESS_HEADLINE_VOTE_ENDTIME,
 } from "@/lib/slack";
-import { getToday } from "@/lib/common";
+import { isTimePassed } from "@/lib/common";
+import useInterval from "@/hooks/useInterval";
 
-function isTimePassed(timeToCheck) {
-  // timeToCheck in format: HH:mm
-  const today = getToday();
-  const dateString = `${today}T${timeToCheck}:00`;
-  const endTimestamp = new Date(dateString).getTime();
-  return endTimestamp < Date.now();
-}
+const ONE_MINUTE_IN_MS = 60000;
 
 export default function HeadlinesPage() {
   const [headlines, setHeadlines] = useState([]);
@@ -23,6 +18,24 @@ export default function HeadlinesPage() {
   );
   const [selectingEnded, setSelectingEnded] = useState(
     isTimePassed(PROCESS_HEADLINE_SELECT_ENDTIME),
+  );
+
+  useInterval(
+    () => {
+      if (isTimePassed(PROCESS_HEADLINE_VOTE_ENDTIME)) {
+        setVotingEnded(true);
+      }
+    },
+    votingEnded ? null : ONE_MINUTE_IN_MS,
+  );
+
+  useInterval(
+    () => {
+      if (isTimePassed(PROCESS_HEADLINE_SELECT_ENDTIME)) {
+        setSelectingEnded(true);
+      }
+    },
+    selectingEnded ? null : ONE_MINUTE_IN_MS,
   );
 
   useEffect(() => {
@@ -52,7 +65,7 @@ export default function HeadlinesPage() {
           Todays voting is open until {PROCESS_HEADLINE_VOTE_ENDTIME}, and the
           ability to select ends {PROCESS_HEADLINE_SELECT_ENDTIME}
         </div>
-        {headlines.map(({ headline, votes, selected, id }, idx) => (
+        {headlines.map(({ headline, votes, selected, id }) => (
           <NewsHeadline key={id}>
             <NewsHeadline.Heading>{headline}</NewsHeadline.Heading>
             <NewsHeadline.PropsWrapper>
