@@ -6,10 +6,8 @@ import {
   PROCESS_HEADLINE_SELECT_ENDTIME,
   PROCESS_HEADLINE_VOTE_ENDTIME,
 } from "@/lib/slack";
-import { isTimePassed } from "@/lib/common";
+import { isTimePassed, ONE_MINUTE_IN_MS } from "@/lib/common";
 import useInterval from "@/hooks/useInterval";
-
-const ONE_MINUTE_IN_MS = 60000;
 
 export default function HeadlinesPage() {
   const [headlines, setHeadlines] = useState([]);
@@ -69,11 +67,13 @@ export default function HeadlinesPage() {
             <NewsHeadline.Heading>{headline}</NewsHeadline.Heading>
             <NewsHeadline.PropsWrapper>
               <NewsHeadline.VoteProp
+                type="headline"
                 id={id}
                 votes={votes}
                 closed={votingEnded}
               />
               <NewsHeadline.SelectProp
+                type="headline"
                 id={id}
                 selected={selected}
                 closed={selectingEnded}

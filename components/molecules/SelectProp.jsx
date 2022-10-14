@@ -74,17 +74,18 @@ const Circle = styled.div`
   }
 `;
 
-const SelectProp = ({ id, selected: initialSelected, closed }) => {
+const SelectProp = ({ id, selected: initialSelected, closed, type }) => {
   const [selected, setSelected] = useState(initialSelected);
+
   const onClick = async (e) => {
     e.preventDefault();
     if (closed) {
       return;
     }
     if (selected) {
-      await backendClient.delete(`headline/${id}/select`);
+      await backendClient.delete(`${type}/${id}/select`);
     } else {
-      await backendClient.get(`headline/${id}/select`);
+      await backendClient.get(`${type}/${id}/select`);
     }
     setSelected(!selected);
   };

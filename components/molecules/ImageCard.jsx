@@ -1,3 +1,5 @@
+import SelectProp from "@/components/molecules/SelectProp";
+import VoteProp from "@/components/molecules/VoteProp";
 import styled from "styled-components";
 
 const StyledArticle = styled.article`
@@ -58,6 +60,8 @@ const Prop = ({ active, children }) => (
 ImageCard.Heading = Heading;
 ImageCard.Image = ImageWrapper;
 ImageCard.PropsWrapper = PropsWrapper;
+ImageCard.SelectProp = SelectProp;
+ImageCard.VoteProp = VoteProp;
 ImageCard.Prop = Prop;
 
 export default ImageCard;

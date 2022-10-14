@@ -55,14 +55,14 @@ const StyledPropSpan = styled.span`
   padding: 16px;
 `;
 
-const VoteProp = ({ id, votes: initialVotes, closed }) => {
+const VoteProp = ({ id, votes: initialVotes, closed, type }) => {
   const [votes, setVotes] = useState(parseInt(initialVotes, 10));
   const voteUp = async (e) => {
     e.preventDefault();
     if (closed) {
       return;
     }
-    await backendClient.get(`headline/${id}/upvote`);
+    await backendClient.get(`${type}/${id}/upvote`);
     setVotes(votes + 1);
   };
 
@@ -70,7 +70,7 @@ const VoteProp = ({ id, votes: initialVotes, closed }) => {
     if (closed) {
       return;
     }
-    backendClient.get(`headline/${id}/downvote`);
+    backendClient.get(`${type}/${id}/downvote`);
     setVotes(votes - 1);
   };
 
