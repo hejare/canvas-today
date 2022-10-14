@@ -6,8 +6,8 @@ import styled from "styled-components";
 // import { NavButton } from "@/components/molecules/NavButton";
 import { backendClient } from "@/services/backendClient";
 import { STATUS_UNKNOWN_TEXT } from "@/services/responseConstants";
-import PageHeader from "components/molecules/PageHeader";
-import PageFooter from "components/molecules/PageFooter";
+import PageHeader from "@/components/molecules/PageHeader";
+import PageFooter from "@/components/molecules/PageFooter";
 
 const LayoutComposition = styled.div`
   height: 100vh;

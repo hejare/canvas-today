@@ -1,5 +1,5 @@
-import Header from "components/molecules/Header";
-import NavLink from "components/molecules/NavLink";
+import Header from "@/components/molecules/Header";
+import NavLink from "@/components/molecules/NavLink";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 

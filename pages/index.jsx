@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { backendClient } from "@/services/backendClient";
-import ArtImage from "components/molecules/ArtImage";
-import ImageCard from "components/molecules/ImageCard";
-import Layout from "components/Layout";
+import ArtImage from "@/components/molecules/ArtImage";
+import ImageCard from "@/components/molecules/ImageCard";
+import Layout from "@/components/Layout";
 
 export default function Home() {
   const [arts, setArts] = useState([]);

@@ -1,6 +1,6 @@
 import { backendClient } from "@/services/backendClient";
-import Icon from "components/atoms/icon";
-import IconButton from "components/atoms/IconButton";
+import Icon from "@/components/atoms/Icon";
+import IconButton from "@/components/atoms/IconButton";
 import { useState } from "react";
 import styled from "styled-components";
 

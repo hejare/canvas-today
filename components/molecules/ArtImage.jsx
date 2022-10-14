@@ -1,4 +1,4 @@
-import Image from "components/atoms/Image";
+import Image from "@/components/atoms/Image";
 import styled from "styled-components";
 
 const ArtImage = styled(Image)`

@@ -1,7 +1,7 @@
 import { backendClient } from "@/services/backendClient";
-import IconButton from "components/atoms/IconButton";
-import ThumbDownIcon from "components/atoms/ThumbDownIcon";
-import ThumbUpIcon from "components/atoms/ThumbUpIcon";
+import IconButton from "@/components/atoms/IconButton";
+import ThumbDownIcon from "@/components/atoms/ThumbDownIcon";
+import ThumbUpIcon from "@/components/atoms/ThumbUpIcon";
 import { useState } from "react";
 import styled from "styled-components";
 

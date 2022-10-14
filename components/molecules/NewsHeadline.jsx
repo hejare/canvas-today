@@ -1,5 +1,5 @@
-import SelectProp from "components/molecules/SelectProp";
-import VoteProp from "components/molecules/VoteProp";
+import SelectProp from "@/components/molecules/SelectProp";
+import VoteProp from "@/components/molecules/VoteProp";
 import styled from "styled-components";
 
 const StyledArticle = styled.article`

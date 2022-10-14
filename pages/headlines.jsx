@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { backendClient } from "@/services/backendClient";
-import Layout from "components/Layout";
-import NewsHeadline from "components/molecules/NewsHeadline";
+import Layout from "@/components/Layout";
+import NewsHeadline from "@/components/molecules/NewsHeadline";
 import {
   PROCESS_HEADLINE_SELECT_ENDTIME,
   PROCESS_HEADLINE_VOTE_ENDTIME,

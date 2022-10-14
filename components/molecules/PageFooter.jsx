@@ -1,5 +1,5 @@
-import Footer from "components/molecules/Footer";
-import NavLink from "components/molecules/NavLink";
+import Footer from "@/components/molecules/Footer";
+import NavLink from "@/components/molecules/NavLink";
 import styled from "styled-components";
 
 const FooterWrapper = styled.div`
