@@ -36,30 +36,24 @@ const PageFooter = ({ healthStatus }) => (
       </Footer.Main>
       <Footer.Nav>
         <NavLink href="/api/health" status={healthStatus}>
-          <code>api/health</code>
+          <code>/health</code>
         </NavLink>
 
         <NavLink href="/api/headline">
-          <code>api/headline</code>
+          <code>/headline</code>
         </NavLink>
         <NavLink href="/api/headline/aggregate">
-          <code>api/headline/aggregate</code>
-        </NavLink>
-        <NavLink href="/api/headline/slack-action-vote">
-          <code>api/headline/slack-action-vote</code>
-        </NavLink>
-        <NavLink href="/api/headline/slack-action-select">
-          <code>api/headline/slack-action-select</code>
+          <code>/headline/aggregate</code>
         </NavLink>
 
         <NavLink href="/api/art">
-          <code>api/art</code>
+          <code>/art</code>
         </NavLink>
-        <NavLink href="/api/art/slack-action-vote">
-          <code>api/art/slack-action-vote</code>
+        <NavLink href="/api/art/generate">
+          <code>/art/generate</code>
         </NavLink>
-        <NavLink href="/api/art/slack-action-select">
-          <code>api/art/slack-action-select</code>
+        <NavLink href="/api/art/update-generated">
+          <code>/art/update-generated</code>
         </NavLink>
       </Footer.Nav>
     </Footer>

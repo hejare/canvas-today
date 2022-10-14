@@ -16,7 +16,7 @@ const StyledMain = styled.main`
 const Main = ({ children }) => <StyledMain>{children}</StyledMain>;
 
 const StyledH2 = styled.h2`
-  padding: 0 16px;
+  margin: 0 0 0 16px;
 `;
 
 const Heading = ({ children }) => <StyledH2>{children}</StyledH2>;
