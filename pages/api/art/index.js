@@ -6,18 +6,13 @@ export default async function handler(req, res) {
   try {
     let data = {};
     switch (method) {
-      // case "POST":
-      //   data.result = Array.isArray(body)
-      //     ? await addArts(body)
-      //     : await addArt(body);
-      //   break;
       case "GET":
         if (query.today) {
           data.result = await getArtsToday();
         } else if (query.selected) {
           data.result = await getSelectedArts();
         } else {
-          data.result = await getArtsToday();
+          data.result = await getAllArts();
         }
         break;
       default:

@@ -59,25 +59,28 @@ const fetcher = async (
   return fetch(url, options).then(handleResult).catch(handleError);
 };
 
-const post = (url, { headers, params, body } = baseOptions) =>
-  fetcher(url, {
-    method: "POST",
-    headers,
-    params,
-    body,
-  });
-
-const generic =
-  (method) =>
-  (url, { headers, params } = baseOptions) =>
+const generic = (method) => {
+  return (url, { headers, params } = baseOptions) =>
     fetcher(url, {
       method: method,
       headers,
       params,
     });
+};
+
+const genericWithBody = (method) => {
+  return (url, { headers, params, body } = baseOptions) =>
+    fetcher(url, {
+      method: method,
+      headers,
+      params,
+      body,
+    });
+};
 
 export const backendClient = {
   get: generic("GET"),
-  post: post,
+  post: genericWithBody("POST"),
+  put: genericWithBody("PUT"),
   delete: generic("DELETE"),
 };

@@ -1,5 +1,6 @@
+import { getMetadataFromIpfsUrl } from "@/lib/ipfs";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { deleteArt, getArt, updateArt } from "data/artData";
+import { getNft, updateNft } from "data/nftData";
 
 export default async function handler(req, res) {
   const { method, query, body } = req;
@@ -8,13 +9,13 @@ export default async function handler(req, res) {
     let data = {};
     switch (method) {
       case "PUT":
-        data.result = await updateArt(id, body);
+        data.result = await updateNft(id, body);
         break;
       case "GET":
-        data.result = await getArt(id);
-        break;
-      case "DELETE":
-        data.result = await deleteArt(id);
+        data.result = await getNft(id);
+        if (data.result.ipfsUrl) {
+          data.result.meta = await getMetadataFromIpfsUrl(data.result.ipfsUrl);
+        }
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

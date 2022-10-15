@@ -1,20 +1,17 @@
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { deleteArt, getArt, updateArt } from "data/artData";
+import { addNft, getAllNfts } from "data/nftData";
 
 export default async function handler(req, res) {
-  const { method, query, body } = req;
-  const { id } = query;
+  const { method, body } = req;
   try {
     let data = {};
     switch (method) {
-      case "PUT":
-        data.result = await updateArt(id, body);
+      case "POST":
+        console.log("body:", body);
+        data.result = await addNft(body);
         break;
       case "GET":
-        data.result = await getArt(id);
-        break;
-      case "DELETE":
-        data.result = await deleteArt(id);
+        data.result = await getAllNfts();
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

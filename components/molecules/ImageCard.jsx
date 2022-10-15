@@ -79,8 +79,10 @@ const StyledButton = styled(Button)`
   }}
 `;
 
-const ButtonProp = ({ active, children }) => (
-  <StyledButton active={active}>{children}</StyledButton>
+const ButtonProp = ({ active, children, ...rest }) => (
+  <StyledButton active={active} {...rest}>
+    {children}
+  </StyledButton>
 );
 
 const StyledNavLink = styled(NavLink)`

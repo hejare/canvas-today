@@ -54,6 +54,7 @@ const additionalHeaders = () => {
 const fetcher = async (
   endpoint,
   { method, headers = {}, body, params = {} } = baseOptions,
+  returnRaw = false,
 ) => {
   // Pass the ipfs address through a ipfs to https proxy:
   // List of proxies can be found here: https://ipfs.github.io/public-gateway-checker/
@@ -70,7 +71,14 @@ const fetcher = async (
     body: ["GET", "DELETE"].includes(method) ? null : JSON.stringify(body),
   };
   // console.log("NEWS:", options, url)
-  return fetch(url, options).then(handleResult).catch(handleError);
+  return fetch(url, options)
+    .then((result) => {
+      if (returnRaw) {
+        return result;
+      }
+      return handleResult(result);
+    })
+    .catch(handleError);
 };
 
 const post = (ipfsUrl, { headers, params, body } = baseOptions) =>
@@ -81,16 +89,21 @@ const post = (ipfsUrl, { headers, params, body } = baseOptions) =>
     body,
   });
 
-const generic =
-  (method) =>
-  (ipfsUrl, { headers, params } = baseOptions) =>
-    fetcher(ipfsUrl, {
-      method: method,
-      headers,
-      params,
-    });
+const generic = (method, returnRaw) => {
+  return (ipfsUrl, { headers, params } = baseOptions) =>
+    fetcher(
+      ipfsUrl,
+      {
+        method: method,
+        headers,
+        params,
+      },
+      returnRaw,
+    );
+};
 
 export const ipfsProxyClient = {
   get: generic("GET"),
   post: post,
+  getRaw: generic("GET", true),
 };
