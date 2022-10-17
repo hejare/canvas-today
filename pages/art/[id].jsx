@@ -63,11 +63,11 @@ export default function ArtPage() {
         meta,
         useMock: true,
       });
-      const { url, ipnft } = storeFileResponse;
+      const { url: ipfsUrl, ipnft } = storeFileResponse;
 
       const createResult = await backendClient.post("nft", {
         body: {
-          ipfsUrl: url,
+          ipfsUrl,
           cid: ipnft,
           artId: id,
           prompt,
@@ -80,6 +80,7 @@ export default function ArtPage() {
           imageUrl,
         },
       });
+      setNft(createResult.result);
 
       // Now lets update art with the nft db-reference:
       await backendClient.put(`art/${id}`, {
@@ -90,6 +91,20 @@ export default function ArtPage() {
       });
     } else {
       console.log("lets do mint!");
+      const backendResponse = await backendClient.get("hre/base-token-uri");
+      if (backendResponse.result !== nft.ipfsUrl) {
+        console.log(
+          `Must change base-uri from ${backendResponse.result} to ${nft.ipfsUrl}`,
+        );
+        const transactionResponse = await backendClient.put(
+          "hre/base-token-uri",
+          {
+            body: { baseTokenUri: nft.ipfsUrl },
+          },
+        );
+        console.log("transactionResponse:", transactionResponse);
+      }
+      console.log("And now we are ready to make the transfer?");
     }
   };
 
