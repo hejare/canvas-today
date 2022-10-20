@@ -7,6 +7,8 @@ require("@nomiclabs/hardhat-ethers");
 require("./scripts/deploy.js");
 require("./scripts/mint.js");
 require("@nomiclabs/hardhat-etherscan");
+require("./scripts/tests.js");
+require("hardhat-contract-sizer");
 
 const {
   ALCHEMY_API_KEY,
@@ -16,7 +18,7 @@ const {
 } = process.env; // TODO: Look over how we want to manage account keys etc
 
 module.exports = {
-  solidity: "0.8.1",
+  solidity: "0.8.12",
   defaultNetwork: "goerli",
   networks: {
     hardhat: {},

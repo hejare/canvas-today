@@ -19,7 +19,9 @@ task("deploy", "Deploys the NFT.sol contract").setAction(async function (
     "NFT",
     getAccount(),
   );
-  const nft = await nftContractFactory.deploy();
+  const nft = await nftContractFactory.deploy(
+    "0x14daa7439c6BdeeAf5c42C5751Fc0B070af57766", // TODO: Use the "wallet" address where all funds should be stored
+  );
   console.log(
     `Contract deployed to address: ${nft.address} (Update the NFT_CONTRACT_ADDRESS with this address)`,
   ); // This output address is the value for NFT_CONTRACT_ADDRESS

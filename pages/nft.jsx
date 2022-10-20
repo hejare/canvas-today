@@ -10,7 +10,7 @@ export default function NftsPage() {
 
   useEffect(() => {
     async function getNfts() {
-      const response = await backendClient.get("hre/nfts");
+      const response = await backendClient.get("hre/nft");
       console.log(response);
       setNfts(response.result?.ownedNfts);
     }

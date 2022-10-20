@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import { SpinnerBar } from "@/components/atoms/SpinnerBar";
 
-const StyledDiv = styled.div`
+const EnabledDiv = styled.div`
   cursor: pointer;
   position: relative;
   align-items: center;
@@ -29,9 +30,25 @@ const StyledDiv = styled.div`
   :active {
     background-color: yellow;
   }
+  ${({ disabled }) => (disabled ? "background-color: black;" : "")}
 `;
 
-const Button = ({ children, ...props }) => {
-  return <StyledDiv {...props}>{children}</StyledDiv>;
+const DisabledDiv = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+`;
+
+const Button = ({ children, disabled, ...props }) => {
+  return disabled ? (
+    <DisabledDiv {...props}>
+      <SpinnerBar />
+    </DisabledDiv>
+  ) : (
+    <EnabledDiv {...props}>{children}</EnabledDiv>
+  );
 };
 export default Button;

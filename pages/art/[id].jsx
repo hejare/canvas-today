@@ -6,6 +6,13 @@ import Layout from "@/components/Layout";
 import ImageCard from "@/components/molecules/ImageCard";
 import ArtImage from "@/components/molecules/ArtImage";
 import { storeFile } from "@/lib/ipfs";
+import { STATUS_OK_TEXT } from "@/services/responseConstants";
+
+const STATUS_INITIATING = "initiating";
+const STATUS_READY = "ready";
+const STATUS_PENDING = "pending";
+const STATUS_SUCCESS = "success";
+const STATUS_ERROR = "error";
 
 export default function ArtPage() {
   const router = useRouter();
@@ -13,11 +20,13 @@ export default function ArtPage() {
 
   const [art, setArt] = useState();
   const [nft, setNft] = useState();
+  const [status, setStatus] = useState(STATUS_INITIATING);
 
   useEffect(() => {
     async function getArt() {
       const response = await backendClient.get(`art/${id}`);
       setArt(response.result);
+      setStatus(STATUS_READY);
     }
     getArt();
   }, []);
@@ -33,6 +42,11 @@ export default function ArtPage() {
   }, [art]);
 
   const mintNft = async () => {
+    if (status === STATUS_PENDING) {
+      console.log("Work in progress...");
+      return;
+    }
+    setStatus(STATUS_PENDING);
     // Check stuff... like...is it minted? how many? does it have Meta on ispf?
     const {
       imageUrl,
@@ -57,6 +71,7 @@ export default function ArtPage() {
         version,
         model,
         modelVersion,
+        // include "MAX_SUPPLY"?
       };
       const storeFileResponse = await storeFile({
         imageUrl,
@@ -89,26 +104,46 @@ export default function ArtPage() {
           nftId: createResult.result.id,
         },
       });
+    } else if (typeof nft.mintedCount === "undefined") {
+      console.log("Lets add this art to the contract:", nft);
+      // Add art to NFT contract:
+      const backendResponseAddArt = await backendClient.post("hre/nft", {
+        body: {
+          metaUrl: nft.ipfsUrl,
+          artId: nft.artId,
+        },
+      });
+      console.log("backendResponseAddArt:", backendResponseAddArt);
+      const updatedNft = {
+        ...nft,
+        mintedCount: 0,
+      };
+      await backendClient.put(`nft/${nft.id}`, {
+        body: updatedNft,
+      });
+      setNft(updatedNft);
     } else {
       console.log("lets do mint!");
-      const backendResponse = await backendClient.get("hre/base-token-uri");
-      if (backendResponse.result !== nft.ipfsUrl) {
-        console.log(
-          `Must change base-uri from ${backendResponse.result} to ${nft.ipfsUrl}`,
-        );
-        const transactionResponse = await backendClient.put(
-          "hre/base-token-uri",
-          {
-            body: { baseTokenUri: nft.ipfsUrl },
+
+      const mintResponse = await backendClient.post("hre/mint", {
+        body: { artId: art.id },
+      });
+      console.log("mintResponse:", mintResponse);
+      if (mintResponse.status === STATUS_OK_TEXT) {
+        await backendClient.put(`nft/${nft.id}`, {
+          body: {
+            ...nft,
+            mintedCount: nft.mintedCount + 1,
           },
-        );
-        console.log("transactionResponse:", transactionResponse);
+        });
       }
-      console.log("And now we are ready to make the transfer?");
+      // setStatus(STATUS_SUCCESS);
+      // check transaction here: https://goerli.etherscan.io/tx/${mintResponse.result.hash}
     }
+    setStatus(STATUS_READY);
   };
 
-  if (!art) {
+  if (status === STATUS_INITIATING) {
     return <>Loading...</>;
   }
 
@@ -135,7 +170,10 @@ export default function ArtPage() {
             />
           </ImageCard.Image>
           <ImageCard.PropsWrapper>
-            <ImageCard.ButtonProp onClick={mintNft}>
+            <ImageCard.ButtonProp
+              onClick={mintNft}
+              disabled={status === STATUS_PENDING}
+            >
               Mint NFT
             </ImageCard.ButtonProp>
             <ImageCard.SelectProp
