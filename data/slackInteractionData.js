@@ -9,13 +9,13 @@ import {
 } from "@/lib/slack";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
 // import { slackClient } from "@/services/slackClient";
-import { downvoteArt, setSelectedArt, upvoteArt } from "data/artData";
+import { downvoteArt, setSelectedArt, upvoteArt } from "@/data/artData";
 import {
   downvoteHeadline,
   setSelectedHeadline,
   upvoteHeadline,
-} from "data/headlineData";
-// import { addLog } from "data/logData";
+} from "@/data/headlineData";
+// import { addLog } from "@/data/logData";
 
 export const addInteraction = async (data) => {
   const { actions, response_url, user } = data;

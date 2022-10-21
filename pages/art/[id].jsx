@@ -21,6 +21,7 @@ export default function ArtPage() {
   const [art, setArt] = useState();
   const [nft, setNft] = useState();
   const [status, setStatus] = useState(STATUS_INITIATING);
+  const [mintablesLeft, setMintablesLeft] = useState(-1);
 
   useEffect(() => {
     async function getArt() {
@@ -143,6 +144,17 @@ export default function ArtPage() {
     setStatus(STATUS_READY);
   };
 
+  useEffect(() => {
+    async function getArtDataFromContract(artId) {
+      const response = await backendClient.get(`hre/nft/by-art/${artId}`);
+      console.log("response.result.art.counter", response.result.art.counter);
+      setMintablesLeft(5 - response.result.art.counter);
+    }
+    if (art?.id) {
+      getArtDataFromContract(art?.id);
+    }
+  }, [art]);
+
   if (status === STATUS_INITIATING) {
     return <>Loading...</>;
   }
@@ -153,6 +165,7 @@ export default function ArtPage() {
   if (nft?.meta?.image) {
     ipfsImageSrc = `/api/nft/image?src=${encodeURIComponent(nft.meta.image)}`;
   }
+  console.log({ mintablesLeft });
   return (
     <Layout
       title={`Art ${id}`}
@@ -169,12 +182,16 @@ export default function ArtPage() {
               ipfs={!!ipfsImageSrc}
             />
           </ImageCard.Image>
+          {status === STATUS_PENDING}
           <ImageCard.PropsWrapper>
             <ImageCard.ButtonProp
               onClick={mintNft}
-              disabled={status === STATUS_PENDING}
+              disabled={mintablesLeft === 0}
+              loading={status === STATUS_PENDING}
             >
               Mint NFT
+              <br />
+              {mintablesLeft > -1 ? `(${mintablesLeft} of 5 left)` : ""}
             </ImageCard.ButtonProp>
             <ImageCard.SelectProp
               type="art"

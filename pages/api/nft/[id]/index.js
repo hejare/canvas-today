@@ -1,6 +1,6 @@
 import { getMetadataFromIpfsUrl } from "@/lib/ipfs";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { getNft, updateNft } from "data/nftData";
+import { getNft, updateNft } from "@/data/nftData";
 
 export default async function handler(req, res) {
   const { method, query, body } = req;

@@ -1,7 +1,7 @@
 import { isTimePassed } from "@/lib/common";
 import { PROCESS_ART_SELECT_ENDTIME } from "@/lib/slack";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { setSelectedArt, unsetSelectedArt } from "data/artData";
+import { setSelectedArt, unsetSelectedArt } from "@/data/artData";
 
 export default async function handler(req, res) {
   const { method, query } = req;

@@ -59,6 +59,16 @@ task("add-art", "Add new art to contract")
     return response;
   });
 
+task("get-art", "Get art from contract")
+  .addParam("artId", "The artId")
+  .setAction(async function (taskArguments, hre) {
+    const contract = await getContract("NFT", hre);
+    const response = await contract.getArt(taskArguments.artId, {
+      gasLimit: 200_000,
+    });
+    return response;
+  });
+
 task("get-nft-meta-by-artid", "Fetches the NFT metadata")
   .addParam("artId", "The artId")
   .setAction(
@@ -81,7 +91,15 @@ task("get-nft-meta-by-artid", "Fetches the NFT metadata")
       console.log(
         `Metadata fetch response: ${JSON.stringify(metadata, null, 2)}`,
       );
-      return metadata;
+      return {
+        art: {
+          artId: art[0],
+          metaUrl: art[1],
+          counter: art[2],
+          exists: art[3],
+        },
+        metadata,
+      };
     },
   );
 
@@ -151,23 +169,25 @@ task(
     const contract = await getContract("NFT", hre);
     // Note: this fails currently, due to not uploading sub-metadata-files as mentioned in https://docs.opensea.io/docs/part-3-adding-metadata-and-payments-to-your-contract
     // tokenId has to be BigNumber yes?))
-    const response = await contract.tokenURI(taskArguments.tokenId, {
+    // const tokenId = BigNumber("3726242302889329426436"); // = taskArguments.tokenId
+    const tokenId = taskArguments.tokenId;
+    console.log("tokeind?", tokenId);
+    const response = await contract.tokenURI(tokenId, {
       gasLimit: 500_000,
     });
     const metadata_url = response;
-    console.log(
-      `Metadata URL: ${metadata_url}, tokenId=${taskArguments.tokenId}`,
-    );
+    console.log("response", response);
+    console.log(`Metadata URL: ${metadata_url}, tokenId=${tokenId}`);
 
-    let metadata;
-    if (metadata_url.indexOf("ipfs") === 0) {
-      metadata = await ipfsProxyClient(metadata_url);
-    } else {
-      metadata = await fetch(metadata_url).then((res) => res.json());
-    }
-    console.log(
-      `Metadata fetch response: ${JSON.stringify(metadata, null, 2)}`,
-    );
+    // let metadata;
+    // if (metadata_url.indexOf("ipfs") === 0) {
+    //   metadata = await ipfsProxyClient(metadata_url);
+    // } else {
+    //   metadata = await fetch(metadata_url).then((res) => res.json());
+    // }
+    // console.log(
+    //   `Metadata fetch response: ${JSON.stringify(metadata, null, 2)}`,
+    // );
   });
 
 // task("get-base-token-uri", "Fetches the base token uri").setAction(

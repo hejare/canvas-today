@@ -1,5 +1,5 @@
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { addNft, getAllNfts } from "data/nftData";
+import { addNft, getAllNfts } from "@/data/nftData";
 
 export default async function handler(req, res) {
   const { method, body } = req;

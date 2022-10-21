@@ -128,6 +128,7 @@ const dark = {
       },
       error: colors.white,
       active: colors.white,
+      disabled: colors.mediumGrey,
     },
     text: {
       primary: colors.white,
@@ -137,6 +138,7 @@ const dark = {
       },
       error: colors.red,
       active: colors.lightGreen,
+      disabled: colors.white,
     },
     border: {
       primary: colors.mediumGrey,

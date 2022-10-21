@@ -1,5 +1,5 @@
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { deleteHeadline, getHeadline, setHeadline } from "data/headlineData";
+import { deleteHeadline, getHeadline, setHeadline } from "@/data/headlineData";
 
 export default async function handler(req, res) {
   const { method, query, body } = req;

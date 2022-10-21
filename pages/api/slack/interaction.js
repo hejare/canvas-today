@@ -1,8 +1,8 @@
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-// import { getSelectedArt, setSelectedArt } from "data/artData";
-import { addLog } from "data/logData";
-import { addInteraction } from "data/slackInteractionData";
+// import { getSelectedArt, setSelectedArt } from "@/data/artData";
+import { addLog } from "@/data/logData";
+import { addInteraction } from "@/data/slackInteractionData";
 
 export default async function handler(req, res) {
   await corsMiddleware(req, res, cors);

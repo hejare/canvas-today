@@ -4,7 +4,7 @@ import {
   addHeadlines,
   getAllHeadlines,
   getHeadlinesToday,
-} from "data/headlineData";
+} from "@/data/headlineData";
 
 export default async function handler(req, res) {
   const { method, body, query } = req;

@@ -33,22 +33,34 @@ const EnabledDiv = styled.div`
   ${({ disabled }) => (disabled ? "background-color: black;" : "")}
 `;
 
-const DisabledDiv = styled.div`
+const LoadingDiv = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 `;
 
-const Button = ({ children, disabled, ...props }) => {
-  return disabled ? (
-    <DisabledDiv {...props}>
-      <SpinnerBar />
-    </DisabledDiv>
-  ) : (
-    <EnabledDiv {...props}>{children}</EnabledDiv>
-  );
+const DisabledDiv = styled.div`
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.palette.background.disabled};
+  color: ${({ theme }) => theme.palette.text.disabled};
+`;
+
+const Button = ({ children, loading, disabled, ...props }) => {
+  if (loading) {
+    return (
+      <LoadingDiv {...props}>
+        <SpinnerBar />
+      </LoadingDiv>
+    );
+  }
+  if (disabled) {
+    return <DisabledDiv {...props}>{children}</DisabledDiv>;
+  }
+  return <EnabledDiv {...props}>{children}</EnabledDiv>;
 };
 export default Button;

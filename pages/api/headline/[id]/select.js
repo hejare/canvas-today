@@ -1,7 +1,10 @@
 import { isTimePassed } from "@/lib/common";
 import { PROCESS_HEADLINE_SELECT_ENDTIME } from "@/lib/slack";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { setSelectedHeadline, unsetSelectedHeadline } from "data/headlineData";
+import {
+  setSelectedHeadline,
+  unsetSelectedHeadline,
+} from "@/data/headlineData";
 
 export default async function handler(req, res) {
   const { method, query } = req;

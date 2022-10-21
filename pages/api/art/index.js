@@ -1,5 +1,5 @@
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { getAllArts, getArtsToday, getSelectedArts } from "data/artData";
+import { getAllArts, getArtsToday, getSelectedArts } from "@/data/artData";
 
 export default async function handler(req, res) {
   const { method, query } = req;

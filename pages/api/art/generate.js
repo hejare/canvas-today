@@ -2,8 +2,8 @@ import { generateArts } from "@/lib/canvasToday";
 import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { getHeadlinesToday, getSelectedHeadline } from "data/headlineData";
-import { addLog } from "data/logData";
+import { getHeadlinesToday, getSelectedHeadline } from "@/data/headlineData";
+import { addLog } from "@/data/logData";
 
 const NR_OF_ALTERNATIVES = 3;
 export default async function handler(req, res) {

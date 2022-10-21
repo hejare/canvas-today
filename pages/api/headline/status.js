@@ -1,5 +1,5 @@
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { getHeadlineStatus } from "data/headlineData";
+import { getHeadlineStatus } from "@/data/headlineData";
 
 export default async function handler(req, res) {
   try {

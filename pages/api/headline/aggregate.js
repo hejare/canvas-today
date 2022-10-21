@@ -1,7 +1,7 @@
 import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { fetchHeadline } from "../../../lib/canvasToday";
-import { appendHeadlines } from "data/headlineData";
+import { appendHeadlines } from "@/data/headlineData";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
 
 export default async function handler(req, res) {

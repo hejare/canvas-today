@@ -2,8 +2,8 @@ import { updateArtsWithoutImageUrl } from "@/lib/canvasToday";
 import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { getArtsWithoutImageUrl } from "data/artData";
-import { addLog } from "data/logData";
+import { getArtsWithoutImageUrl } from "@/data/artData";
+import { addLog } from "@/data/logData";
 
 export default async function handler(req, res) {
   await corsMiddleware(req, res, cors);
