@@ -4,6 +4,8 @@ import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
 import { addLog } from "@/data/logData";
 import { addInteraction } from "@/data/slackInteractionData";
 
+// TODO: MOVE TO "trigger" folder and rename the folder
+
 export default async function handler(req, res) {
   await corsMiddleware(req, res, cors);
   const { method, body } = req;

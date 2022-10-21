@@ -5,11 +5,8 @@ import {
   getAllHeadlines,
   getHeadlinesToday,
 } from "@/data/headlineData";
-import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 
 export default async function handler(req, res) {
-  await corsMiddleware(req, res, cors);
-
   const { method, body, query } = req;
   try {
     let data = {};

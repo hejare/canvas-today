@@ -2,11 +2,8 @@ import { isTimePassed } from "@/lib/common";
 import { PROCESS_HEADLINE_VOTE_ENDTIME } from "@/lib/slack";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
 import { upvoteHeadline } from "@/data/headlineData";
-import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 
 export default async function handler(req, res) {
-  await corsMiddleware(req, res, cors);
-
   const { method, query } = req;
   const { id } = query;
   try {
