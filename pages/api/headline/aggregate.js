@@ -1,11 +1,18 @@
 import { getToday } from "@/lib/common";
-import { cors, corsMiddleware } from "@/lib/corsMiddleware";
+// import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { fetchHeadline } from "../../../lib/canvasToday";
 import { appendHeadlines } from "@/data/headlineData";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
+import NextCors from "nextjs-cors";
 
 export default async function handler(req, res) {
-  await corsMiddleware(req, res, cors);
+  // await corsMiddleware(req, res, cors);
+  await NextCors(req, res, {
+    // Options
+    methods: ["GET"],
+    origin: "*",
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  });
 
   const today = getToday();
   let meta = {
