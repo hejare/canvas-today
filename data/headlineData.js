@@ -2,22 +2,6 @@ import { getToday } from "@/lib/common";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
 import { headlineModel } from "./headlineModel";
 
-export const getHeadlineStatus = async () => {
-  const dbResponse = await faunaDbClient.query(
-    query.Map(
-      query.Paginate(query.Documents(query.Collection("headline-status"))),
-      query.Lambda((x) => query.Get(x)),
-    ),
-  );
-  return dbResponse.data.map((d) => {
-    return {
-      ...d.data,
-      ts: d.ts,
-      id: d.ref.id,
-    };
-  });
-};
-
 export const setHeadlineStatus = (status) => {
   return faunaDbClient.query(
     query.Create(query.Collection("headline-status"), { status: status }),
