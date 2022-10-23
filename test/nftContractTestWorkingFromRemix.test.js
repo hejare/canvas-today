@@ -3,9 +3,9 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 // const twoot = require("@ethersproject/bignumber");
 
-describe("Storage 2", function () {
+describe("Storage (in Remix, NFT here)", function () {
   it("test stuff", async function () {
-    const Storage = await ethers.getContractFactory("Storage");
+    const Storage = await ethers.getContractFactory("NFT");
     const storage = await Storage.deploy(
       "0x14daa7439c6BdeeAf5c42C5751Fc0B070af57766",
     );
@@ -27,5 +27,6 @@ describe("Storage 2", function () {
 
     const meta = await storage.tokenURI(artitems[0]); // BigNumber(1));
     console.log("meta:", meta);
+    expect(true).to.equal(true);
   });
 });

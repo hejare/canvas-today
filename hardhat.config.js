@@ -37,6 +37,9 @@ module.exports = {
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`],
     },
   },
+  mocha: {
+    timeout: 100000000,
+  },
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
   },
