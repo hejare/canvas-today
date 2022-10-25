@@ -1,22 +1,14 @@
-import { getMetadataFromIpfsUrl } from "@/lib/ipfs";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { getNft, updateNft } from "@/data/nftData";
+import { run } from "hardhat";
 
 export default async function handler(req, res) {
-  const { method, query, body } = req;
+  const { method, query } = req;
   const { id } = query;
   try {
-    let data = {};
+    const data = {};
     switch (method) {
-      case "PUT":
-        data.result = await updateNft(id, body);
-        break;
       case "GET":
-        data.result = await getNft(id);
-        if (data.result.ipfsUrl) {
-          // TODO: I do not thin k I want to do this here...
-          data.result.meta = await getMetadataFromIpfsUrl(data.result.ipfsUrl);
-        }
+        data.result = await run("get-art", { artId: id });
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);
@@ -27,16 +19,19 @@ export default async function handler(req, res) {
       ...data,
     });
   } catch (e) {
+    console.log(e);
     let message = e.message;
     if (typeof e.message !== "string") {
       message = e;
+    } else if (e.body) {
+      message = JSON.parse(e.body);
     }
 
+    console.log(message);
     let status = 500;
-    if (message.includes("instance not found")) {
+    if (message.includes("Art does not exist")) {
       status = 404;
     }
-
     return res.status(status).json({
       status: STATUS_NOK_TEXT,
       error: message,
