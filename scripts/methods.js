@@ -22,6 +22,19 @@ task(
   return tokenIdsCurrent.toNumber();
 });
 
+task("estimate-add-art", "Estimate Create new item?")
+  .addParam("artId", "Id for art")
+  .addParam("metaUrl", "Url for tokenID meta response")
+  .setAction(async function (taskArguments, hre) {
+    const contract = await getContract("NFT", hre);
+    const functionGasFees = await contract.estimateGas.addArt(
+      taskArguments.artId,
+      taskArguments.metaUrl,
+    );
+    return functionGasFees;
+  });
+
+// addArt signature: 0xa48d0b4f ??? (guessed from etherscan)
 task("add-art", "Create new item?")
   .addParam("artId", "Id for art")
   .addParam("metaUrl", "Url for tokenID meta response")
@@ -50,14 +63,22 @@ task("get-art", "Get art by artId")
     return resp;
   });
 
+task("estimate-mint", "Estimate Mint new NFT for given artId")
+  .addParam("artId", "Id for art")
+  .setAction(async function (taskArguments, hre) {
+    const contract = await getContract("NFT", hre);
+
+    const functionGasFees = await contract.estimateGas.mint(
+      taskArguments.artId,
+    );
+    return functionGasFees;
+  });
 task("mint", "Mint new NFT for given artId")
   .addParam("artId", "Id for art")
   .setAction(async function (taskArguments, hre) {
     const contract = await getContract("NFT", hre);
 
-    const resp = await contract.mint(taskArguments.artId, {
-      gasLimit: 500_000,
-    });
+    const resp = await contract.mint(taskArguments.artId);
     return resp;
   });
 
@@ -66,8 +87,6 @@ task("token-uri", "Get NFT meta url for given tokenId")
   .setAction(async function (taskArguments, hre) {
     const contract = await getContract("NFT", hre);
 
-    const resp = await contract.tokenURI(taskArguments.tokenId, {
-      gasLimit: 500_000,
-    });
+    const resp = await contract.tokenURI(taskArguments.tokenId);
     return resp;
   });

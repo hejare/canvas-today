@@ -2,27 +2,24 @@ import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
 import { run } from "hardhat";
 
 export default async function handler(req, res) {
-  const { method, body } = req;
+  const { method, body, query } = req;
   try {
     const data = {};
     switch (method) {
       case "POST":
         const { artId } = body;
 
-        data.result = await run("mint", { artId });
-        console.log(data.result);
+        if (query.estimate) {
+          data.result = await run("estimate-mint", { artId });
+        } else {
+          data.result = await run("mint", { artId });
+        }
 
-        // const mintToAddress = process.env.FEE_RECIPIENT_ADDRESS; // TODO: get from input?
-        // data.result = await run("mintTo", { artId, address: mintToAddress });
-
-        // temp just checking the meta:
-        // const tokenId = data.result;
-        // console.log("tokenId:", tokenId);
-        // data.result2 = await run("get-nft-meta-by-tokenid", {
-        //   tokenId: tokenId, // BigNumber(3),
-        // });
-        // console.log("result after get meta:", data.result2);
-
+        console.log(
+          "mint res:(posible estimated)",
+          query.estimate,
+          data.result,
+        );
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

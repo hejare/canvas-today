@@ -19,7 +19,6 @@ export default async function handler(req, res) {
       ...data,
     });
   } catch (e) {
-    console.log(e);
     let message = e.message;
     if (typeof e.message !== "string") {
       message = e;
@@ -27,7 +26,6 @@ export default async function handler(req, res) {
       message = JSON.parse(e.body);
     }
 
-    console.log(message);
     let status = 500;
     if (message.includes("Art does not exist")) {
       status = 404;

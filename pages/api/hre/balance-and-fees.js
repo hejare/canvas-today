@@ -2,7 +2,7 @@ import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
 import { run } from "hardhat";
 import { alchemyClient, web3 } from "@/services/alchemyClient";
 import { ethers } from "hardhat/internal/lib/hardhat-lib";
-import utils from "web3-utils";
+// import utils from "web3-utils"; // has the "sha3" for example
 
 const getAllFees = async () => {
   const historicalBlocks = 20;
@@ -71,7 +71,7 @@ const PERCENTILE_FAST = 85;
 const fetchHistoryFees = async () => {
   const numBlocks = 35;
 
-  const ethersProvider = await alchemyClient.config.getProvider();
+  const ethersProvider = await alchemyClient.config.getProvider(); // intresting... get the provider like this!
   console.log("ethersProvider", ethersProvider);
   const feeData = await ethersProvider.getFeeHistory(numBlocks, "latest", [
     PERCENTILE_SLOW,
@@ -102,16 +102,6 @@ const getGetGasHistoryPrice = (data, percentileIndex) => {
   return totalGasPrice.div(numBlocks).toString(0);
 };
 
-const fetchFees = (gasPrice) => {
-  const gasPriceBN = gasPrice; // ethers.BigNumber.from(gasPrice);
-
-  return {
-    slow: gasPriceBN.toString(),
-    // normal: gasPriceBN.mul(1.1).toString(),
-    // fast: gasPriceBN.mul(1.3).toString(),
-  };
-};
-
 const getNonce = async () => {
   return alchemyClient.core.getTransactionCount(
     "0x14daa7439c6BdeeAf5c42C5751Fc0B070af57766",
@@ -122,71 +112,36 @@ const getNonce = async () => {
   // ),
 };
 
-const estimateGas = async () => {
-  const dataSha = utils
-    .sha3("mint(uint256 artId) public payable")
-    .substr(0, 10);
-
-  const tx = {
-    // Wrapped ETH address
-    to: "0x14daa7439c6BdeeAf5c42C5751Fc0B070af57766",
-    // `function deposit() payable`
-    // data: "0xd0e30db0", // "function deposit() payable"
-    data: dataSha,
-    // 1 ether
-    // value: parseEther("1.0"),
-  };
-  return alchemyClient.core.estimateGas(tx);
-};
-
 const getGasPrice = async () => {
   return alchemyClient.core.getGasPrice();
-  // return web3.eth.getGasPrice();
+  // return web3.eth.getGasPrice(); // provider.getGasPrice()
 };
 
 export default async function handler(req, res) {
   try {
-    let balance = await run("check-balance"); // reutrn s Bignumber
+    let balance = await run("check-balance"); // reutrns Bignumber
 
-    // let transaction = {
-    //   to: "0x31B98D14007bDEe637298086988A0bBd31184523", // faucet address to return eth
-    //   value: 10,
-    //   gasLimit: "21000",
-    //   maxFeePerGas: Utils.parseUnits("20", "gwei"),
-    //   nonce: nonce,
-    //   type: 2,
-    //   chainId: 5,
-    // };
-
-    // const txBase = {
-    //   ...transaction,
-    //   from: "0x14daa7439c6BdeeAf5c42C5751Fc0B070af57766",
-    //   nonce: await getNonce(),
-    //   gasPrice: await getGasPrice(),
-    //   chainId: this.chainID,
-    // };
-    // console.log(utils);
-    // console.log(
-    //   "initial balance variable:",
-    //   typeof balance,
-    //   balance,
-    //   parseInt(balance),
-    // );
     balance = ethers.BigNumber.from(balance);
-    // console.log("balance:", balance);
+
     const gasPrice = await getGasPrice();
-    const estimatedGas = await estimateGas();
-    // console.log("gasPrice:", gasPrice);
-    // console.log("gwei:", ethers.utils.formatUnits(gasPrice, "gwei"));
+
+    const estimateAddArtCall = await run("estimate-add-art", {
+      artId: "346482521126469833",
+      metaUrl:
+        "ipfs://bafyreieotq5vjciv7cxncusdilyejwod6cmdwmtdi2hwt6wjf2a6qpamie/metadata.json",
+    });
+
     const data = {
       balance: ethers.utils.formatUnits(balance, "gwei"),
       nonce: await getNonce(),
-      estimatedGas: estimatedGas.toNumber(),
       gasPrice: ethers.utils.formatUnits(gasPrice, "gwei"),
-      cost: ethers.utils.formatUnits(estimatedGas * gasPrice, "gwei"),
+      estimateAddArtGas: estimateAddArtCall.toNumber(),
+      estimateAddArtCost: ethers.utils.formatUnits(
+        estimateAddArtCall.mul(gasPrice),
+        "gwei",
+      ),
+
       feesHistory: await getAllFees(),
-      // fees: fetchFees(gasPrice),
-      // heesHistory: await fetchHistoryFees(),
     };
 
     res.status(200).json({
