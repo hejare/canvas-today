@@ -5,14 +5,19 @@ import { backendClient } from "@/services/backendClient";
 import Layout from "@/components/Layout";
 import ImageCard from "@/components/molecules/ImageCard";
 import ArtImage from "@/components/molecules/ArtImage";
-import { storeFile } from "@/lib/ipfs";
 import { STATUS_OK_TEXT } from "@/services/responseConstants";
+import { IgnoreException, InstanceNotFoundError } from "@/lib/error";
+import { useAsyncCallback } from "@/hooks/useAsyncCallback";
 
-const STATUS_INITIATING = "initiating";
-const STATUS_READY = "ready";
-const STATUS_PENDING = "pending";
-const STATUS_SUCCESS = "success";
-const STATUS_ERROR = "error";
+const STATUS_ART_INITIATING = "STATUS_ART_INITIATING";
+const STATUS_ART_READY = "STATUS_ART_READY";
+// const STATUS_ART_PENDING = "STATUS_ART_PENDING";
+// const STATUS_ART_SUCCESS = "STATUS_ART_SUCCESS";
+const STATUS_MINT_INITIATING = "STATUS_MINT_INITIATING";
+const STATUS_MINT_READY = "STATUS_MINT_READY";
+const STATUS_MINT_PENDING = "STATUS_MINT_PENDING";
+const STATUS_MINT_ERROR = "STATUS_MINT_ERROR";
+// const STATUS_MINT_SUCCESS = "STATUS_MINT_SUCCESS";
 
 export default function ArtPage() {
   const router = useRouter();
@@ -20,35 +25,36 @@ export default function ArtPage() {
 
   const [art, setArt] = useState();
   const [nft, setNft] = useState();
-  const [status, setStatus] = useState(STATUS_INITIATING);
+  const [artStatus, setArtStatus] = useState(STATUS_ART_INITIATING);
+  const [mintStatus, setMintStatus] = useState(STATUS_MINT_INITIATING);
   const [mintablesLeft, setMintablesLeft] = useState(-1);
+  const [artExistInContract, setArtExistInContract] = useState();
 
   useEffect(() => {
     async function getArt() {
-      const response = await backendClient.get(`art/${id}`);
-      setArt(response.result);
-      setStatus(STATUS_READY);
+      const responseArt = await backendClient.get(`art/${id}`);
+      setArt(responseArt.result);
+
+      const { nftId } = responseArt.result;
+      if (nftId) {
+        try {
+          const responseNft = await backendClient.get(`nft/${nftId}`);
+          setNft(responseNft.result);
+        } catch (e) {
+          if (e instanceof InstanceNotFoundError) {
+            await uploadImageAndCreateNftDb(responseArt.result);
+          }
+        }
+      } else {
+        await uploadImageAndCreateNftDb(responseArt.result);
+      }
+
+      setArtStatus(STATUS_ART_READY);
     }
     getArt();
   }, []);
 
-  useEffect(() => {
-    async function getNft(nftId) {
-      const response = await backendClient.get(`nft/${nftId}`);
-      setNft(response.result);
-    }
-    if (art?.nftId) {
-      getNft(art?.nftId);
-    }
-  }, [art]);
-
-  const mintNft = async () => {
-    if (status === STATUS_PENDING) {
-      console.log("Work in progress...");
-      return;
-    }
-    setStatus(STATUS_PENDING);
-    // Check stuff... like...is it minted? how many? does it have Meta on ispf?
+  const uploadImageAndCreateNftDb = async (freshArt) => {
     const {
       imageUrl,
       seed,
@@ -58,75 +64,71 @@ export default function ArtPage() {
       version,
       model,
       modelVersion,
-    } = art;
+    } = freshArt;
 
-    if (!nft) {
-      // Ok, first step is to prep metadata and put to IPFS:
-      const meta = {
-        artId: id,
+    const meta = {
+      artId: id,
+      imageUrl,
+      headline,
+      seed,
+      date,
+      prompt,
+      version,
+      model,
+      modelVersion,
+      // include "MAX_SUPPLY"?
+    };
+    const storeFileResponse = await backendClient.post("ipfs/store-file", {
+      body: {
         imageUrl,
-        headline,
-        seed,
-        date,
+        meta,
+      },
+    });
+
+    const { ipfsUrl, cid } = storeFileResponse.result;
+
+    const createResult = await backendClient.post("nft", {
+      body: {
+        ipfsUrl,
+        cid,
+        artId: id,
         prompt,
         version,
         model,
         modelVersion,
-        // include "MAX_SUPPLY"?
-      };
-      const storeFileResponse = await storeFile({
+        seed,
+        headline,
+        date,
         imageUrl,
-        meta,
-        useMock: true,
-      });
-      const { url: ipfsUrl, ipnft } = storeFileResponse;
+      },
+    });
 
-      const createResult = await backendClient.post("nft", {
-        body: {
-          ipfsUrl,
-          cid: ipnft,
-          artId: id,
-          prompt,
-          version,
-          model,
-          modelVersion,
-          seed,
-          headline,
-          date,
-          imageUrl,
-        },
-      });
-      setNft(createResult.result);
+    setNft(createResult.result);
 
-      // Now lets update art with the nft db-reference:
-      await backendClient.put(`art/${id}`, {
-        body: {
-          ...art,
-          nftId: createResult.result.id,
-        },
-      });
-    } else if (typeof nft.mintedCount === "undefined") {
-      console.log("Lets add this art to the contract:", nft);
-      // Add art to NFT contract:
-      const backendResponseAddArt = await backendClient.post("hre/nft", {
-        body: {
-          metaUrl: nft.ipfsUrl,
-          artId: nft.artId,
-        },
-      });
-      console.log("backendResponseAddArt:", backendResponseAddArt);
-      const updatedNft = {
-        ...nft,
-        mintedCount: 0,
-      };
-      await backendClient.put(`nft/${nft.id}`, {
-        body: updatedNft,
-      });
-      setNft(updatedNft);
-    } else {
+    // Now lets update art with the nft db-reference:
+    await backendClient.put(`art/${id}`, {
+      body: {
+        ...art,
+        nftId: createResult.result.id,
+      },
+    });
+  };
+
+  const [mintNft, isMinting] = useAsyncCallback({
+    callback: async () => {
+      if (mintStatus === STATUS_MINT_PENDING) {
+        console.log("Minting in progress...");
+        return;
+      }
+      setMintStatus(STATUS_MINT_PENDING);
+
+      console.log({ artExistInContract });
+      if (artExistInContract === false) {
+        await addArtToSmartContract();
+      }
+
       console.log("lets do mint!");
-
-      const mintResponse = await backendClient.post("hre/mint", {
+      const mintResponse = await backendClient.post("hre/nft/mint", {
         body: { artId: art.id },
       });
       console.log("mintResponse:", mintResponse);
@@ -138,24 +140,54 @@ export default function ArtPage() {
           },
         });
       }
-      // setStatus(STATUS_SUCCESS);
       // check transaction here: https://goerli.etherscan.io/tx/${mintResponse.result.hash}
-    }
-    setStatus(STATUS_READY);
+      setMintStatus(STATUS_MINT_READY);
+    },
+    onError: (e) => {
+      console.log("ok, we got an error:", e);
+      setMintStatus(STATUS_MINT_ERROR);
+    },
+  });
+
+  const addArtToSmartContract = async () => {
+    console.log("Lets add this art to the contract:", nft);
+    const backendResponseAddArt = await backendClient.post("hre/art", {
+      body: {
+        metaUrl: nft.ipfsUrl,
+        artId: nft.artId,
+      },
+    });
+    setArtExistInContract(true);
+
+    console.log("backendResponseAddArt:", backendResponseAddArt);
+    const updatedNft = {
+      ...nft,
+      // TODO: Add the tokenId here!!!!!
+      mintedCount: 0,
+    };
+    await backendClient.put(`nft/${nft.id}`, {
+      body: updatedNft,
+    });
+    setNft(updatedNft);
   };
 
   useEffect(() => {
     async function getArtDataFromContract(artId) {
-      const response = await backendClient.get(`hre/nft/by-art/${artId}`);
-      console.log("response.result.art.counter", response.result.art.counter);
-      setMintablesLeft(5 - response.result.art.counter);
+      try {
+        const response = await backendClient.get(`hre/art/${artId}`);
+        setMintablesLeft(5 - response.result[0]);
+        setArtExistInContract(true);
+      } catch (e) {
+        setMintablesLeft(5);
+        setArtExistInContract(false);
+        IgnoreException(e);
+      }
+      setMintStatus(STATUS_MINT_READY);
     }
-    if (art?.id) {
-      getArtDataFromContract(art?.id);
-    }
-  }, [art]);
+    getArtDataFromContract(id);
+  }, []);
 
-  if (status === STATUS_INITIATING) {
+  if (artStatus === STATUS_ART_INITIATING) {
     return <>Loading...</>;
   }
 
@@ -163,9 +195,11 @@ export default function ArtPage() {
 
   let ipfsImageSrc;
   if (nft?.meta?.image) {
-    ipfsImageSrc = `/api/nft/image?src=${encodeURIComponent(nft.meta.image)}`;
+    // TODO: The image url should be fetched from the smart contract
+    console.log("nft.meta.image:", nft.meta.image);
+    ipfsImageSrc = `/api/ipfs/image?src=${encodeURIComponent(nft.meta.image)}`;
   }
-  console.log({ mintablesLeft });
+
   return (
     <Layout
       title={`Art ${id}`}
@@ -182,12 +216,14 @@ export default function ArtPage() {
               ipfs={!!ipfsImageSrc}
             />
           </ImageCard.Image>
-          {status === STATUS_PENDING}
           <ImageCard.PropsWrapper>
             <ImageCard.ButtonProp
               onClick={mintNft}
-              disabled={mintablesLeft === 0}
-              loading={status === STATUS_PENDING}
+              disabled={
+                mintablesLeft === 0 || mintStatus === STATUS_MINT_PENDING
+              }
+              loading={mintStatus === STATUS_MINT_PENDING || isMinting}
+              indicate={mintStatus === STATUS_MINT_ERROR ? "error" : ""}
             >
               Mint NFT
               <br />

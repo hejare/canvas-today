@@ -77,10 +77,17 @@ const StyledButton = styled(Button)`
       `;
     }
   }}
+  ${({ theme, indicate }) => {
+    if (indicate === "error") {
+      return `
+      border-color: ${theme.palette.text.error};
+      `;
+    }
+  }}
 `;
 
-const ButtonProp = ({ active, children, ...rest }) => (
-  <StyledButton active={active} {...rest}>
+const ButtonProp = ({ active, indicate, children, ...rest }) => (
+  <StyledButton active={active} indicate={indicate} {...rest}>
     {children}
   </StyledButton>
 );
