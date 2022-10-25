@@ -5,10 +5,11 @@
 require("dotenv").config();
 require("@nomiclabs/hardhat-ethers");
 require("./scripts/deploy.js");
-require("./scripts/mint.js");
+// require("./scripts/mint.js");
 require("@nomiclabs/hardhat-etherscan");
-require("./scripts/tests.js");
+// require("./scripts/tests.js");
 require("hardhat-contract-sizer");
+require("./scripts/methods.js");
 
 const {
   ALCHEMY_API_KEY,

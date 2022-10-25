@@ -18,7 +18,7 @@ contract NFT is ERC721, PullPayment, Ownable {
   uint8 public constant TOTAL_SUPPLY = 5;
 
   address payable wallet;
-  Counters.Counter public tokenIds; // COUL DPERHAPS BE REMOVED SIN CEWE DONT CARE ABOUT THIS...except _exists...
+  Counters.Counter public tokenIds; // COULD DPERHAPS BE REMOVED SINC EWE DONT CARE ABOUT THIS...except _exists...
 
   mapping(uint256 => ArtNftStruct) ArtNfts;
   struct ArtNftStruct {
@@ -36,7 +36,11 @@ contract NFT is ERC721, PullPayment, Ownable {
   uint256[] public artIds;
 
   // TODO: Check if not any of the default event emitted from ERC721 is usable...
-  event Minted(address indexed _buyer, uint256 indexed _artId);
+  event Minted(
+    address indexed _buyer,
+    uint256 indexed _artId,
+    uint256 indexed _tokenId
+  );
 
   constructor(address payable _wallet) ERC721("Canvas Today", "NFT") {
     wallet = _wallet;
@@ -75,7 +79,7 @@ contract NFT is ERC721, PullPayment, Ownable {
     ArtNfts[newTokenId] = NewArtNft;
 
     wallet.transfer(msg.value);
-    emit Minted(msg.sender, artId);
+    emit Minted(msg.sender, artId, newTokenId);
 
     tokenIds.increment();
   }
