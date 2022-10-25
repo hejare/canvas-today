@@ -47,5 +47,10 @@
   },
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "peacock.color": "#1a1a1a",
-  "svg.preview.background": "transparent"
+  "svg.preview.background": "transparent",
+  // "jest.autoEnable": false,
+  "jest.autoRun": {
+    "onStartup": []
+  },
+  "jest.showCoverageOnLoad": false
 }
