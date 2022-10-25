@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         break;
       case "GET":
         const artIdsBN = await run("get-art-ids");
-        data.result = artIdsBN.map((artIdBN) => Number(artIdBN));
+        data.result = artIdsBN.map((artIdBN) => artIdBN.toString());
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

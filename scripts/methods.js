@@ -57,9 +57,7 @@ task("get-art", "Get art by artId")
   .setAction(async function (taskArguments, hre) {
     const contract = await getContract("NFT", hre);
 
-    const resp = await contract.getArt(taskArguments.artId, {
-      gasLimit: 500_000,
-    });
+    const resp = await contract.getArt(taskArguments.artId);
     return resp;
   });
 

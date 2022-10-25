@@ -1,5 +1,6 @@
 import { getNfts } from "@/lib/alchemyData";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
+import { run } from "hardhat/internal/lib/hardhat-lib";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -7,6 +8,7 @@ export default async function handler(req, res) {
     const data = {};
     switch (method) {
       case "GET":
+        data.totalNumberOfMinted = await run("get-number-of-minted");
         data.result = await getNfts();
         break;
       default:
