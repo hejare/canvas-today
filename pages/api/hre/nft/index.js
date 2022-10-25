@@ -1,17 +1,11 @@
 import { getNfts } from "@/lib/alchemyData";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { run } from "hardhat";
 
 export default async function handler(req, res) {
-  const { method, body } = req;
+  const { method } = req;
   try {
     const data = {};
     switch (method) {
-      case "POST":
-        console.log("body:", body);
-        const { artId, metaUrl } = body;
-        data.result = await run("add-art", { artId, metaUrl });
-        break;
       case "GET":
         data.result = await getNfts();
         break;

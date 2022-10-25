@@ -2,13 +2,17 @@ import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
 import { run } from "hardhat";
 
 export default async function handler(req, res) {
-  const { method, query } = req;
-  const { id } = query;
+  const { method, body } = req;
   try {
     const data = {};
     switch (method) {
+      case "POST":
+        const { artId, metaUrl } = body;
+        data.result = await run("add-art", { artId, metaUrl });
+        break;
       case "GET":
-        data.result = await run("get-nft-meta-by-artid", { artId: id });
+        const artIdsBN = await run("get-art-ids");
+        data.result = artIdsBN.map((artIdBN) => Number(artIdBN));
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

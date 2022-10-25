@@ -8,7 +8,9 @@ export default async function handler(req, res) {
     switch (method) {
       case "POST":
         const { artId } = body;
+
         data.result = await run("mint", { artId });
+        console.log(data.result);
 
         // const mintToAddress = process.env.FEE_RECIPIENT_ADDRESS; // TODO: get from input?
         // data.result = await run("mintTo", { artId, address: mintToAddress });
