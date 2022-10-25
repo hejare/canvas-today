@@ -1,10 +1,15 @@
 import { uuid } from "@/lib/common";
+import { InstanceNotFoundError } from "@/lib/error";
 
 const baseHeaders = { "Content-Type": "application/json" };
 const baseOptions = { headers: {}, body: {}, params: {}, stringify: true };
 
+const INSTANCE_NOT_FOUND = "instance not found";
 const handleError = async ({ external, error }) => {
   if (external) {
+    if (error.error === INSTANCE_NOT_FOUND) {
+      throw new InstanceNotFoundError(error);
+    }
     return Promise.reject({ location: "external (Backend)", message: error });
   }
 
