@@ -196,7 +196,6 @@ export default function ArtPage() {
   let ipfsImageSrc;
   if (nft?.meta?.image) {
     // TODO: The image url should be fetched from the smart contract
-    console.log("nft.meta.image:", nft.meta.image);
     ipfsImageSrc = `/api/ipfs/image?src=${encodeURIComponent(nft.meta.image)}`;
   }
 
