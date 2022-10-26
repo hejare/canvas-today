@@ -53,7 +53,7 @@ const additionalHeaders = () => {
 
 const fetcher = async (
   endpoint,
-  { method, headers = {}, body, params = {} } = baseOptions,
+  { method, headers = {}, params = {} } = baseOptions,
   returnRaw = false,
 ) => {
   // Pass the ipfs address through a ipfs to https proxy:
@@ -68,7 +68,6 @@ const fetcher = async (
   const options = {
     method,
     headers: { ...baseHeaders, ...additionalHeaders(), ...headers },
-    body: ["GET", "DELETE"].includes(method) ? null : JSON.stringify(body),
   };
   // console.log("NEWS:", options, url)
   return fetch(url, options)
@@ -80,14 +79,6 @@ const fetcher = async (
     })
     .catch(handleError);
 };
-
-const post = (ipfsUrl, { headers, params, body } = baseOptions) =>
-  fetcher(ipfsUrl, {
-    method: "POST",
-    headers,
-    params,
-    body,
-  });
 
 const generic = (method, returnRaw) => {
   return (ipfsUrl, { headers, params } = baseOptions) =>
@@ -104,6 +95,5 @@ const generic = (method, returnRaw) => {
 
 export const ipfsProxyClient = {
   get: generic("GET"),
-  post: post,
   getRaw: generic("GET", true),
 };
