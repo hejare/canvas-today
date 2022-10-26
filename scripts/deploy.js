@@ -11,6 +11,7 @@ task("check-balance", "Prints out the balance of your account").setAction(
   },
 );
 
+// OBS! This does not work well for Matic-mumbai chain!
 task("deploy", "Deploys the NFT.sol contract").setAction(async function (
   taskArguments,
   hre,
