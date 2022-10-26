@@ -11,7 +11,7 @@ export default async function handler(req, res) {
         data.result = await addNft(body);
         break;
       case "GET":
-        data.result = await getAllNfts();
+        data.result = await getAllNfts(); // TODO: Move to be under /api/hre/...
         break;
       default:
         throw new Error(`Unsupported method: ${method}`);

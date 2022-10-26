@@ -42,19 +42,35 @@ const PageFooter = ({ healthStatus }) => (
         <NavLink href="/api/headline">
           <code>/headline</code>
         </NavLink>
-        <NavLink href="/api/headline/aggregate">
-          <code>/headline/aggregate</code>
-        </NavLink>
-
         <NavLink href="/api/art">
           <code>/art</code>
         </NavLink>
-        <NavLink href="/api/art/generate">
-          <code>/art/generate</code>
+        <NavLink href="/api/nft">
+          <code>/nft</code>
         </NavLink>
-        <NavLink href="/api/art/update-generated">
-          <code>/art/update-generated</code>
+
+        <NavLink href="/api/hre/art">
+          <code>/hre/art</code>
         </NavLink>
+        <NavLink href="/api/hre/nft">
+          <code>/hre/nft</code>
+        </NavLink>
+        <NavLink href="/api/hre/balance-and-fees">
+          <code>/hre/balance-and-fees</code>
+        </NavLink>
+        <NavLink href="/api/hre/info">
+          <code>/hre/info</code>
+        </NavLink>
+
+        <NavLink href="/api/cron/aggregate-headline">
+          <code>/cron/aggregate-headline</code>
+        </NavLink>
+        {/* <NavLink href="/api/cron/generate-art">
+          <code>/cron/generate-art</code>
+        </NavLink>
+        <NavLink href="/api/cron/update-generated-art">
+          <code>/cron/update-generated-art</code>
+        </NavLink> */}
       </Footer.Nav>
     </Footer>
   </FooterWrapper>
