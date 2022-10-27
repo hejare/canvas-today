@@ -69,13 +69,14 @@ export default function ArtsPage() {
           Todays voting is open until {PROCESS_ART_VOTE_ENDTIME}, and the
           ability to select ends {PROCESS_ART_SELECT_ENDTIME}
         </div>
-        {arts.map(({ headline, votes, id, imageUrl, seed }) => (
+        {arts.map(({ headline, votes, id, imageUrl, prompt, seed }) => (
           <ImageCard key={id}>
             <ImageCard.Heading>{headline}</ImageCard.Heading>
             <ImageCard.Image>
               <ArtImage imageUrl={imageUrl} alt={headline} size="available" />
             </ImageCard.Image>
             <ImageCard.PropsWrapper>
+              <ImageCard.Prop>{prompt.replace(headline, "")}</ImageCard.Prop>
               <ImageCard.Prop>{seed}</ImageCard.Prop>
               <ImageCard.VoteProp
                 type="art"
