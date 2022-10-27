@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       headline = votedHeadline.headline;
     }
 
-    const result = await generateArts(headline, NR_OF_ALTERNATIVES);
+    const result = await generateArts(headline, NR_OF_ALTERNATIVES); // per artist which is an array hardcoded...
     meta.result = result;
     // if (postSuccessful) {
     //   // TODO: Store status?
