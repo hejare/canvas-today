@@ -1,5 +1,5 @@
 # Using the API etc:
-
+[OUTDATED!!!]
 To skip actually generating new image (which consumes credits at the AI-service), you can add the "use-mock" query param like this:
 (_May be combined with other query params mentioned in this doc_)
 

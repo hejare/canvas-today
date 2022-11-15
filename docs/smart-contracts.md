@@ -17,10 +17,8 @@ yarn hardhat compile
 
 ### Deploy _the_ smart contract:
 
-...and as you might guess, the network argument sets which network we deploy to.
-
 ```
-yarn hardhat run scripts/deploy.js --network goerli
+yarn hardhat run scripts/deploy-matic.js
 ```
 
 ### Check balance:

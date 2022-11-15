@@ -17,5 +17,6 @@ Current dependencies:
 - [Setup](docs/setup.md)
 - [Using API etc](docs/using-api-etc.md)
 - [Patching](docs/patching.md)
+- [HardhatRuntimeEnvironment](docs/ethereum-hardhat.md)
 - [Smart contracts](docs/smart-contracts.md)
 - [NextJS: Misc](docs/nextjs-misc.md)
