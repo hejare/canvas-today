@@ -85,6 +85,7 @@ const fetchHistoryFees = async () => {
     fast: getGetGasHistoryPrice(feeData, 2),
   };
 };
+
 const getGetGasHistoryPrice = (data, percentileIndex) => {
   // It's not certain that the number of returned blocks matches the number of requested blocks
   const numBlocks = data.baseFeePerGas.length;
@@ -119,10 +120,6 @@ const getGasPrice = async () => {
 
 export default async function handler(req, res) {
   try {
-    let balance = await run("check-balance"); // reutrns Bignumber
-
-    balance = ethers.BigNumber.from(balance);
-
     const gasPrice = await getGasPrice();
 
     const estimateAddArtCall = await run("estimate-add-art", {
@@ -132,7 +129,6 @@ export default async function handler(req, res) {
     });
 
     const data = {
-      balance: ethers.utils.formatUnits(balance, "gwei"),
       nonce: await getNonce(),
       gasPrice: ethers.utils.formatUnits(gasPrice, "gwei"),
       estimateAddArtGas: estimateAddArtCall.toNumber(),
