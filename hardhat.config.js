@@ -8,29 +8,7 @@ require("@nomiclabs/hardhat-etherscan");
 require("hardhat-contract-sizer");
 require("./scripts/methods.js");
 require("./scripts/deploy.js");
-
-/* Future example-structure for supported chains:
-
-  "matic-mumbai": {
-    id: "matic-mumbai",
-    name: "Mumbai",
-
-    info: {
-      chainID: 80001,
-    },
-
-    explorer: {
-      byAddress: (address: string) => `https://mumbai.polygonscan.com/address/${address}`,
-      byHash: (hash: string) => `https://mumbai.polygonscan.com/tx/${hash}`,
-    },
-
-    nft: {
-      supported: true,
-      marketplaceUrl: (address: string, id: string) => `https://testnets.opensea.io/assets/mumbai/${address}/${id}`,
-      marketplaceName: "OpenSea",
-    },
-  },
-*/
+require("./scripts/hre/checkBalance.js");
 
 const {
   ALCHEMY_API_KEY,
@@ -54,23 +32,27 @@ module.exports = {
   allowUnlimitedContractSize: true,
   blockGasLimit: 0x1fffffffffffff,
 
-  defaultNetwork: "polygon_mumbai",
+  // defaultNetwork: "mumbai",
   networks: {
     hardhat: {},
-    polygon_mumbai: {
-      // chainId: 80001,
+    "matic-mumbai": {
+      // url: "https://matic-testnet-archive-rpc.bwarelabs.com",
       url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`],
     },
-    goerli: {
+    "matic-mainnet": {
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+      accounts: [`0x${ACCOUNT_PRIVATE_KEY}`],
+    },
+    "eth-goerli": {
       url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`],
     },
-    // ethereum: {
-    //   chainId: 1,
-    //   url: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
-    //   accounts: [`0x${ACCOUNT_PRIVATE_KEY}`],
-    // },
+    "eth-mainnet": {
+      // chainId: 1,
+      url: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
+      accounts: [`0x${ACCOUNT_PRIVATE_KEY}`],
+    },
   },
   mocha: {
     timeout: 100000000,

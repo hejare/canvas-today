@@ -6,12 +6,19 @@ task("get-art-ids", "Get List of current items").setAction(async function (
   taskArguments,
   hre,
 ) {
-  const contract = await getContract("NFT", hre);
+  // WIP: CONTINUE HERE!!!! Check that we actually have correct contract address for correct address
+  const networkName = taskArguments.networkName || hre.network.name;
+  console.log(networkName, taskArguments.networkName, hre.network.name);
+  const contract = await getContract("NFT", hre, networkName);
   const itemIds = await contract.getArtIds();
   console.log("Contract itemIds:", itemIds);
   return itemIds;
 });
 
+// Update the tasks below after "get-art-ids" is working as intended
+// Update the tasks below after "get-art-ids" is working as intended
+// Update the tasks below after "get-art-ids" is working as intended
+// Update the tasks below after "get-art-ids" is working as intended
 task(
   "get-number-of-minted",
   "Get the current tokenId which is last minted counter",

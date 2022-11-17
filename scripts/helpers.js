@@ -1,47 +1,29 @@
 const { ethers } = require("ethers");
 const { getContractAt } = require("@nomiclabs/hardhat-ethers/internal/helpers");
+const { getProvider, getNftContractAddress } = require("config/chainConfig");
 
-// Helper method for fetching environment variables from .env
-function getEnvVariable(key, defaultValue) {
-  if (process.env[key]) {
-    return process.env[key];
-  }
-  if (!defaultValue) {
-    throw `${key} is not defined and no default value was provided`;
-  }
-  return defaultValue;
+const { ACCOUNT_PRIVATE_KEY } = process.env;
+
+function getAccountPrivateKey(networkName) {
+  // TODO!!!
+  return ACCOUNT_PRIVATE_KEY;
 }
 
-// Helper method for fetching a connection provider to the Ethereum network
-function getProvider() {
-  return ethers.getDefaultProvider(getEnvVariable("NETWORK", "goerli"), {
-    // TODO: remove this "goerli" default value?
-    alchemy: getEnvVariable("ALCHEMY_API_KEY"),
-  });
-}
-
-// Helper method for fetching a wallet account using an environment variable for the PK
-function getAccount() {
+function getAccount(networkName) {
   return new ethers.Wallet(
-    getEnvVariable("ACCOUNT_PRIVATE_KEY"),
-    getProvider(),
+    getAccountPrivateKey(networkName),
+    getProvider(networkName),
   );
 }
 
-// Helper method for fetching a contract instance at a given address
-function getContract(contractName, hre) {
-  const account = getAccount();
-  return getContractAt(
-    hre,
-    contractName,
-    getEnvVariable("NFT_CONTRACT_ADDRESS"),
-    account,
-  );
+function getContract(contractName, hre, networkName) {
+  const account = getAccount(networkName);
+  const contractAddress = getNftContractAddress(networkName);
+  console.log({ account, contractAddress });
+  return getContractAt(hre, contractName, contractAddress, account);
 }
 
 module.exports = {
-  getEnvVariable,
-  getProvider,
   getAccount,
   getContract,
 };

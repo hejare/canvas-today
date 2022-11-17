@@ -1,15 +1,19 @@
 const { task } = require("hardhat/config");
 const { getAccount } = require("./helpers");
 
-// eslint-disable-next-line no-unused-vars
-task("check-balance", "Prints out the balance of your account").setAction(
-  async function (taskArguments, hre) {
-    const account = getAccount();
-    const balance = await account.getBalance();
-    console.log(`Account balance for ${account.address}: ${balance}`);
-    return balance;
-  },
-);
+// task("deploy", "Deploy the smart contracts", async (taskArgs, hre) => {
+//   const nftContractFactory = await hre.ethers.getContractFactory("NFT");
+//   const nft = await nftContractFactory.deploy(
+//     "0x14daa7439c6BdeeAf5c42C5751Fc0B070af57766",
+//   );
+
+//   await nft.deployed();
+
+//   await hre.run("verify:verify", {
+//     address: nft.address,
+//     constructorArguments: [],
+//   });
+// });
 
 // OBS! This does not work well for Matic-mumbai chain!
 task("deploy", "Deploys the NFT.sol contract").setAction(async function (
