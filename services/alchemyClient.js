@@ -15,4 +15,4 @@ const settings = {
 
 export const alchemyClient = new Alchemy(settings);
 
-export const web3 = createAlchemyWeb3(`${apiBaseUrl}${apiKey}`);
+// export const web3 = createAlchemyWeb3(`${apiBaseUrl}${apiKey}`);

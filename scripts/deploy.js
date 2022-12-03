@@ -1,6 +1,22 @@
 const { task } = require("hardhat/config");
 const { getAccount } = require("./helpers");
 
+task(
+  "deploy-from-tutorial",
+  "Deploy the smart contracts",
+  async (taskArgs, hre) => {
+    const Marketplace = await hre.ethers.getContractFactory("Marketplace");
+    // const marketplace = await Marketplace.deploy();
+
+    // await marketplace.deployed();
+
+    // await hre.run("verify:verify", {
+    //   address: marketplace.address,
+    //   constructorArguments: []
+    // })
+  },
+);
+
 // task("deploy", "Deploy the smart contracts", async (taskArgs, hre) => {
 //   const nftContractFactory = await hre.ethers.getContractFactory("NFT");
 //   const nft = await nftContractFactory.deploy(

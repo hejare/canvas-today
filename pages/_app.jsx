@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${theme.palette.background.primary};
   }
   a {
-    color: ${theme.palette.action.link};
+    color: ${theme.palette.action.text};
   }
 `;
 
