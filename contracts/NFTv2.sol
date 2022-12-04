@@ -12,13 +12,13 @@ import "@openzeppelin/contracts/security/PullPayment.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract NFT is ERC721, PullPayment, Ownable {
+import "hardhat/console.sol";
+
+contract NFTv2 is ERC721, PullPayment, Ownable {
   using Counters for Counters.Counter;
 
-  uint8 public constant TOTAL_SUPPLY = 5;
-
   address payable wallet;
-  Counters.Counter public tokenIds; // COULD DPERHAPS BE REMOVED SINC EWE DONT CARE ABOUT THIS...except _exists...
+  Counters.Counter public tokenIds; // COULD DPERHAPS BE REMOVED SINCE WE DONT CARE ABOUT THIS...except _exists...
 
   mapping(uint256 => ArtNftStruct) ArtNfts;
   struct ArtNftStruct {
@@ -31,6 +31,7 @@ contract NFT is ERC721, PullPayment, Ownable {
     uint8 counter;
     bool exists;
     string metaUrl;
+    uint8 maxSupply;
   }
 
   uint256[] public artIds;
@@ -44,18 +45,26 @@ contract NFT is ERC721, PullPayment, Ownable {
 
   constructor(address payable _wallet) ERC721("Canvas Today", "NFT") {
     wallet = _wallet;
+    console.log("constructor!");
   }
 
   function getArtIds() public view returns (uint256[] memory) {
     return artIds;
   }
 
-  function addArt(uint256 artId, string memory metaUrl) public onlyOwner {
+  function addArt(
+    uint256 artId,
+    string memory metaUrl,
+    uint8 maxSupply
+  ) public onlyOwner {
     require(!ArtItems[artId].exists, "Art already exist");
     ArtItems[artId].exists = true;
     ArtItems[artId].counter = 0;
     ArtItems[artId].metaUrl = metaUrl;
+    ArtItems[artId].maxSupply = maxSupply;
     artIds.push(artId);
+
+    console.log("Add art done!", artIds.length, ArtItems[artId].maxSupply);
   }
 
   function getArt(uint256 artId) public view returns (ArtItemStruct memory) {
@@ -65,7 +74,10 @@ contract NFT is ERC721, PullPayment, Ownable {
 
   function mint(uint256 artId) public payable {
     require(ArtItems[artId].exists, "Art does not exist");
-    require(ArtItems[artId].counter < TOTAL_SUPPLY, "Max supply reached");
+    require(
+      ArtItems[artId].counter < ArtItems[artId].maxSupply,
+      "Max supply reached"
+    );
 
     uint256 newTokenId = tokenIds.current();
 
@@ -84,12 +96,9 @@ contract NFT is ERC721, PullPayment, Ownable {
     tokenIds.increment();
   }
 
-  function tokenURI(uint256 tokenId)
-    public
-    view
-    override
-    returns (string memory)
-  {
+  function tokenURI(
+    uint256 tokenId
+  ) public view override returns (string memory) {
     require(
       _exists(tokenId),
       "ERC721Metadata: URI query for nonexistent token"

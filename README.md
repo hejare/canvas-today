@@ -12,6 +12,12 @@ Current dependencies:
 - Blockchain RPC: Alchemy
 - NFT Meta storage (IPFS): https://nft.storage/
 
+## Run test of contract:
+npx hardhat test test/market-test.js
+
+yarn hardhat compile
+yarn hardhat get-art-ids --network matic-mumbai
+
 ## _Further Documentation_
 
 - [Setup](docs/setup.md)
