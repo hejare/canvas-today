@@ -1,0 +1,162 @@
+const { ethers } = require("hardhat");
+const { expect } = require("chai");
+
+describe("Listing of NFT", function () {
+  let nftContract1;
+  let marketplace;
+  let account1;
+  this.beforeEach(async function () {
+    const Artwork = await ethers.getContractFactory("Artwork");
+    const Marketplace = await ethers.getContractFactory("MarketplaceLeo");
+
+    nftContract1 = await Artwork.deploy("Artwork Contract", "ART");
+    marketplace = await Marketplace.deploy();
+
+    [account1] = await ethers.getSigners();
+    const tokenURI1 =
+      "https://opensea-creatures-api.herokuapp.com/api/creature/1";
+    const tokenURI2 =
+      "https://opensea-creatures-api.herokuapp.com/api/creature/2";
+
+    await nftContract1.connect(account1).mint(tokenURI1);
+    await nftContract1.connect(account1).mint(tokenURI2);
+
+    // Approving marketplace to spend NFTs
+    await nftContract1.connect(account1).approve(marketplace.address, 0);
+  });
+
+  it("NFT is successfully listed", async function () {
+    // Listing NFT
+    await marketplace
+      .connect(account1)
+      .listMarketItem(
+        nftContract1.address,
+        0,
+        2,
+        ethers.utils.parseEther("0.1"),
+        {
+          value: ethers.utils.parseEther("0.01"),
+        },
+      );
+
+    // Checking if NFT is listed
+    const listedNFT = await marketplace.getMarketItem(0);
+    expect(listedNFT.nftContractAddress).to.equal(nftContract1.address);
+    expect(listedNFT.price.value).to.equal(
+      ethers.utils.parseEther("0.1").value,
+    );
+    expect(listedNFT.maxCount).to.equal(2);
+    expect(listedNFT.count).to.equal(0);
+  });
+
+  it("NFT can't be listed if listingPrice is not paid", async function () {
+    await expect(
+      marketplace
+        .connect(account1)
+        .listMarketItem(
+          nftContract1.address,
+          0,
+          2,
+          ethers.utils.parseEther("0.1"),
+          { value: ethers.utils.parseEther("0") },
+        ),
+    ).to.be.revertedWith("Must pay the listing price");
+  });
+
+  it("NFT can't be listed if maxCount is not greater than 0", async function () {
+    await expect(
+      marketplace
+        .connect(account1)
+        .listMarketItem(
+          nftContract1.address,
+          0,
+          0,
+          ethers.utils.parseEther("0.1"),
+          { value: ethers.utils.parseEther("0.01") },
+        ),
+    ).to.be.revertedWith("maxCount must be greater than 0");
+  });
+
+  it("NFT can't be listed if NFT is not approved by user", async function () {
+    await expect(
+      marketplace
+        .connect(account1)
+        .listMarketItem(
+          nftContract1.address,
+          1,
+          2,
+          ethers.utils.parseEther("0.1"),
+          {
+            value: ethers.utils.parseEther("0.01"),
+          },
+        ),
+    ).to.revertedWith("ERC721: caller is not token owner or approved");
+  });
+});
+
+describe("Buying of NFT", function () {
+  let nftContract1;
+  let marketplace;
+  let account1;
+  let account2;
+  let prevBalance;
+  let presentBalance;
+  this.beforeEach(async function () {
+    const Artwork = await ethers.getContractFactory("Artwork");
+    const Marketplace = await ethers.getContractFactory("MarketplaceLeo");
+
+    nftContract1 = await Artwork.deploy("Artwork Contract", "ART");
+    marketplace = await Marketplace.deploy();
+
+    [account1, account2] = await ethers.getSigners();
+    const tokenURI =
+      "https://opensea-creatures-api.herokuapp.com/api/creature/1";
+
+    await nftContract1.connect(account1).mint(tokenURI);
+    await nftContract1.connect(account1).approve(marketplace.address, 0);
+    await marketplace
+      .connect(account1)
+      .listMarketItem(
+        nftContract1.address,
+        0,
+        2,
+        ethers.utils.parseEther("0.1"),
+        {
+          value: ethers.utils.parseEther("0.01"),
+        },
+      );
+  });
+
+  it("Buying NFT", async function () {
+    prevBalance = await nftContract1.balanceOf(account2.address);
+    await marketplace
+      .connect(account2)
+      .buyMarketItem(0, { value: ethers.utils.parseEther("0.1") });
+    presentBalance = await nftContract1.balanceOf(account2.address);
+
+    expect(prevBalance).to.equal(0);
+    expect(presentBalance).to.equal(1);
+  });
+
+  it("NFT can't be bought by paying a lower price", async function () {
+    await expect(
+      marketplace
+        .connect(account2)
+        .buyMarketItem(0, { value: ethers.utils.parseEther("0.01") }),
+    ).to.be.revertedWith("Must pay the correct price");
+  });
+
+  it("NFT can't be bought tricee... but thats not the issue...Se NOTE at the top", async function () {
+    await marketplace
+      .connect(account2)
+      .buyMarketItem(0, { value: ethers.utils.parseEther("0.1") });
+    const listedNFT = await marketplace.getMarketItem(0);
+    expect(listedNFT.count).to.equal("1");
+    expect(listedNFT.isSold).to.equal(false);
+    // await expect(
+    //   marketplace
+    //     .connect(account2)
+    //     .buyMarketItem(0, { value: ethers.utils.parseEther("0.1") }),
+    // ).to.be.revertedWith("Item is already sold out");
+  });
+});
