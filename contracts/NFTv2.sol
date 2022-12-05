@@ -80,6 +80,11 @@ contract NFTv2 is ERC721, PullPayment, Ownable {
     return ArtItems[artId];
   }
 
+  function setPrice(uint256 artId, uint256 _price) public onlyOwner {
+    require(ArtItems[artId].exists, "Art does not exist");
+    ArtItems[artId].price = _price;
+  }
+
   function mint(uint256 artId) public payable {
     require(ArtItems[artId].exists, "Art does not exist");
     require(

@@ -5,6 +5,7 @@ describe("NFT Art Test", function () {
   let nftContract1;
   // let marketplace;
   let account1;
+  let account2;
   this.beforeEach(async function () {
     const Artwork = await ethers.getContractFactory("NFTv2");
     // const Marketplace = await ethers.getContractFactory("MarketplaceLeo");
@@ -14,7 +15,7 @@ describe("NFT Art Test", function () {
     ); //"Canvas Art Today Contract", "CAT");
     // marketplace = await Marketplace.deploy();
 
-    [account1] = await ethers.getSigners();
+    [account1, account2] = await ethers.getSigners();
     // const tokenURI1 =
     //   "https://opensea-creatures-api.herokuapp.com/api/creature/1";
     // const tokenURI2 =
@@ -27,7 +28,7 @@ describe("NFT Art Test", function () {
     // await nftContract1.connect(account1).approve(marketplace.address, 0);
   });
 
-  it("Add Art", async function () {
+  xit("Add Art", async function () {
     // Listing NFT
     await nftContract1.connect(account1).addArt(
       1337,
@@ -61,6 +62,28 @@ describe("NFT Art Test", function () {
     await expect(
       nftContract1.connect(account1).mint(1337, { value: 5099 }),
     ).to.be.revertedWith("Max supply reached");
+  });
+
+  it("Change price", async function () {
+    await nftContract1.connect(account1).addArt(
+      1337,
+      "ipfs://bafyreieotq5vjciv7cxncusdilyejwod6cmdwmtdi2hwt6wjf2a6qpamie/metadata.json",
+      2,
+      4096, // wei ?
+      // TODO: Extend support to set a minimum price per added art.
+      // ethers.utils.parseEther("0.1"),
+      // {
+      //   value: ethers.utils.parseEther("0.01"),
+      // },
+    );
+    let art = await nftContract1.connect(account1).getArt(1337);
+    expect(art.price).to.equal(4096);
+    await nftContract1.connect(account1).setPrice(1337, 2000);
+    art = await nftContract1.connect(account1).getArt(1337);
+    expect(art.price).to.equal(2000);
+    await expect(
+      nftContract1.connect(account2).setPrice(1337, 2000),
+    ).to.be.revertedWith("Ownable: caller is not the owner");
   });
 
   //   it("NFT can't be listed if listingPrice is not paid", async function () {
