@@ -33,6 +33,7 @@ describe("NFT Art Test", function () {
       1337,
       "ipfs://bafyreieotq5vjciv7cxncusdilyejwod6cmdwmtdi2hwt6wjf2a6qpamie/metadata.json",
       2,
+      4096, // wei ?
       // TODO: Extend support to set a minimum price per added art.
       // ethers.utils.parseEther("0.1"),
       // {
@@ -45,17 +46,21 @@ describe("NFT Art Test", function () {
     const artIds = await nftContract1.connect(account1).getArtIds();
     expect(artIds[0].toString()).to.equal("1337");
 
-    await nftContract1.connect(account1).mint(1337);
+    await nftContract1.connect(account1).mint(1337, { value: 5000 });
     const theArt_1 = await nftContract1.connect(account1).getArt(1337);
     expect(theArt_1.counter).to.equal(1);
 
-    await nftContract1.connect(account1).mint(1337);
+    await expect(
+      nftContract1.connect(account1).mint(1337, { value: 4000 }),
+    ).to.be.revertedWith("Not enough ETH sent, check price!");
+
+    await nftContract1.connect(account1).mint(1337, { value: 4099 });
     const theArt_2 = await nftContract1.connect(account1).getArt(1337);
     expect(theArt_2.counter).to.equal(2);
 
-    await expect(nftContract1.connect(account1).mint(1337)).to.be.revertedWith(
-      "Max supply reached",
-    );
+    await expect(
+      nftContract1.connect(account1).mint(1337, { value: 5099 }),
+    ).to.be.revertedWith("Max supply reached");
   });
 
   //   it("NFT can't be listed if listingPrice is not paid", async function () {

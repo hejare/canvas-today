@@ -18,7 +18,7 @@ contract NFTv2 is ERC721, PullPayment, Ownable {
   using Counters for Counters.Counter;
 
   address payable wallet;
-  Counters.Counter public tokenIds; // COULD DPERHAPS BE REMOVED SINCE WE DONT CARE ABOUT THIS...except _exists...
+  Counters.Counter public tokenIds; // COULD PERHAPS BE REMOVED SINCE WE DONT CARE ABOUT THIS...except _exists...
 
   mapping(uint256 => ArtNftStruct) ArtNfts;
   struct ArtNftStruct {
@@ -32,6 +32,7 @@ contract NFTv2 is ERC721, PullPayment, Ownable {
     bool exists;
     string metaUrl;
     uint8 maxSupply;
+    uint256 price;
   }
 
   uint256[] public artIds;
@@ -55,16 +56,23 @@ contract NFTv2 is ERC721, PullPayment, Ownable {
   function addArt(
     uint256 artId,
     string memory metaUrl,
-    uint8 maxSupply
+    uint8 maxSupply,
+    uint256 price
   ) public onlyOwner {
     require(!ArtItems[artId].exists, "Art already exist");
     ArtItems[artId].exists = true;
     ArtItems[artId].counter = 0;
     ArtItems[artId].metaUrl = metaUrl;
     ArtItems[artId].maxSupply = maxSupply;
+    ArtItems[artId].price = price;
     artIds.push(artId);
 
-    console.log("Add art done!", artIds.length, ArtItems[artId].maxSupply);
+    console.log(
+      "Add art done!",
+      artIds.length,
+      ArtItems[artId].maxSupply,
+      price
+    );
   }
 
   function getArt(uint256 artId) public view returns (ArtItemStruct memory) {
@@ -77,6 +85,10 @@ contract NFTv2 is ERC721, PullPayment, Ownable {
     require(
       ArtItems[artId].counter < ArtItems[artId].maxSupply,
       "Max supply reached"
+    );
+    require(
+      msg.value >= ArtItems[artId].price,
+      "Not enough ETH sent, check price!"
     );
 
     uint256 newTokenId = tokenIds.current();
@@ -92,6 +104,8 @@ contract NFTv2 is ERC721, PullPayment, Ownable {
 
     wallet.transfer(msg.value);
     emit Minted(msg.sender, artId, newTokenId);
+    console.log("[Art minted] msg.ender, artId:", msg.sender, artId);
+    console.log("[Art minted] msg.value, newTokenId:", msg.value, newTokenId);
 
     tokenIds.increment();
   }
