@@ -20,12 +20,17 @@ import {
 export const addInteraction = async (data) => {
   const { actions, response_url, user } = data;
   const username = user?.username || "no-username";
-  const [action, id] = actions[0].action_id.split(ACTION_SEPARATOR);
+
+  const slackAction = actions[0];
+  const [action, id] = slackAction.action_id.split(ACTION_SEPARATOR);
 
   let result;
   switch (action) {
     case ACTION_UPVOTE_HEADLINE:
-      result = await upvoteHeadline(id);
+      const promises = slackAction.selected_options.map((op) =>
+        upvoteHeadline(op.value),
+      );
+      result = await Promise.all(promises);
       break;
     case ACTION_DOWNVOTE_HEADLINE:
       result = await downvoteHeadline(id);
