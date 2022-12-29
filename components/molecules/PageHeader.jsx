@@ -57,7 +57,7 @@ const PageHeader = ({ title, description }) => {
           </StyledNavLink>
           <StyledNavLink
             href="/arts"
-            active={router.pathname === "/arts"}
+            active={router.pathname.indexOf("/arts") > -1}
             minimize={minimizeNavButton}
           >
             <code>Arts</code>

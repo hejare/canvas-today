@@ -1,7 +1,8 @@
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { getAllArts, getArtsToday, getSelectedArts } from "@/data/artData";
+import { getAllArts, getArtsByDate, getSelectedArts } from "@/data/artData";
 import { getHeadline } from "@/data/headlineData";
 import { generateArt } from "@/lib/canvasToday";
+import { getToday } from "@/lib/common";
 
 export default async function handler(req, res) {
   const { method, query, body } = req;
@@ -9,9 +10,12 @@ export default async function handler(req, res) {
     let data = {};
     switch (method) {
       case "GET":
-        if (query.today) {
-          data.result = await getArtsToday();
-        } else if (query.selected) {
+        const { today, selected, date } = query;
+        if (today) {
+          data.result = await getArtsByDate(getToday());
+        } else if (date) {
+          data.result = await getArtsByDate(date);
+        } else if (selected) {
           data.result = await getSelectedArts();
         } else {
           data.result = await getAllArts();

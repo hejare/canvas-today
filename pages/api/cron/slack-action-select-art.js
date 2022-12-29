@@ -2,7 +2,7 @@ import { getToday } from "@/lib/common";
 import { cors, corsMiddleware } from "@/lib/corsMiddleware";
 import { postSelectArtAction } from "@/lib/slack";
 import { STATUS_NOK_TEXT, STATUS_OK_TEXT } from "@/services/responseConstants";
-import { getArtsToday } from "@/data/artData";
+import { getArtsByDate } from "@/data/artData";
 import { addLog } from "@/data/logData";
 
 export default async function handler(req, res) {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     today,
   };
   try {
-    const arts = await getArtsToday();
+    const arts = await getArtsByDate(today);
 
     const topVoted = arts.sort((a, b) => b.votes - a.votes).slice(0, 3);
     meta.topVoted = topVoted;

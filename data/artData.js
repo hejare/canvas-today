@@ -49,10 +49,10 @@ export const getArtsWithoutImageUrl = async () => {
   }));
 };
 
-export const getArtsToday = async () => {
+export const getArtsByDate = async (date) => {
   const dbResponse = await faunaDbClient.query(
     query.Map(
-      query.Paginate(query.Match(query.Index("art-date-index"), getToday())),
+      query.Paginate(query.Match(query.Index("art-date-index"), date)),
       query.Lambda((x) => query.Get(x)),
     ),
   );

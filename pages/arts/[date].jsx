@@ -7,10 +7,15 @@ import {
   PROCESS_ART_SELECT_ENDTIME,
   PROCESS_ART_VOTE_ENDTIME,
 } from "@/lib/slack";
-import { isTimePassed, ONE_MINUTE_IN_MS } from "@/lib/common";
+import { getToday, isTimePassed, ONE_MINUTE_IN_MS } from "@/lib/common";
 import { useInterval } from "usehooks-ts";
+import { useRouter } from "next/router";
+import ArtsPageNav from "@/components/molecules/ArtsPageNav";
 
 export default function ArtsPage() {
+  const router = useRouter();
+  const { date } = router.query;
+
   const [arts, setArts] = useState([]);
   const [selectedId, setSelectedId] = useState();
   const [votingEnded, setVotingEnded] = useState(
@@ -39,9 +44,9 @@ export default function ArtsPage() {
   );
 
   useEffect(() => {
-    async function getArts() {
+    async function getArts(date) {
       const response = await backendClient.get("art", {
-        params: { today: "1" },
+        params: { date },
       });
       const fetchedArts = response.result.sort((a, b) => b.votes - a.votes);
       const selectedArt = fetchedArts.find((fetchedArt) => fetchedArt.selected);
@@ -50,25 +55,31 @@ export default function ArtsPage() {
       }
       setArts(fetchedArts);
     }
-    getArts();
-  }, []);
+    getArts(date);
+  }, [date]);
 
+  const isToday = getToday() === date;
   return (
     <Layout
       title="Arts"
       description="Todays selected headline will output arts to this page, for some evaluation before being defined as Todays Art!"
     >
       <main style={{ padding: 16, textAlign: "-webkit-center" }}>
-        {votingEnded && (
-          <div style={{ border: "1px solid red" }}>Voting is closed</div>
+        <ArtsPageNav date={date} />
+        {isToday && (
+          <>
+            {votingEnded && (
+              <div style={{ border: "1px solid red" }}>Voting is closed</div>
+            )}
+            {selectingEnded && (
+              <div style={{ border: "1px solid red" }}>Selecting is closed</div>
+            )}
+            <div style={{ border: "1px solid white" }}>
+              Todays voting is open until {PROCESS_ART_VOTE_ENDTIME}, and the
+              ability to select ends {PROCESS_ART_SELECT_ENDTIME}
+            </div>
+          </>
         )}
-        {selectingEnded && (
-          <div style={{ border: "1px solid red" }}>Selecting is closed</div>
-        )}
-        <div style={{ border: "1px solid white" }}>
-          Todays voting is open until {PROCESS_ART_VOTE_ENDTIME}, and the
-          ability to select ends {PROCESS_ART_SELECT_ENDTIME}
-        </div>
         {arts.map(({ headline, votes, id, imageUrl, prompt, seed }) => (
           <ImageCard key={id}>
             <ImageCard.Heading>{headline}</ImageCard.Heading>
