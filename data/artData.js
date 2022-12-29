@@ -1,10 +1,18 @@
 import { getToday } from "@/lib/common";
 import { faunaDbClient, query } from "@/services/faunaDbClient";
 
-export const addArt = (data) => {
-  return faunaDbClient.query(
+export const addArt = async (data) => {
+  const dbResponse = await faunaDbClient.query(
     query.Create(query.Collection("art"), { data: { ...data } }),
   );
+  if (!dbResponse) {
+    return null;
+  }
+
+  return {
+    ...dbResponse.data,
+    id: dbResponse.ref.id,
+  };
 };
 
 export const updateArt = (id, data) => {

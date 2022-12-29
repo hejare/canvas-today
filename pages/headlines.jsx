@@ -89,6 +89,7 @@ export default function HeadlinesPage() {
                 closed={selectingEnded}
                 onSelect={setSelectedId}
               />
+              <NewsHeadline.GenerateArt headlineId={id} />
             </NewsHeadline.PropsWrapper>
           </NewsHeadline>
         ))}

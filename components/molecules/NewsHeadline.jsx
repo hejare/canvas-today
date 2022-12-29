@@ -1,3 +1,4 @@
+import GenerateArtButton from "@/components/molecules/GenerateArtButton";
 import SelectProp from "@/components/molecules/SelectProp";
 import VoteProp from "@/components/molecules/VoteProp";
 import styled from "styled-components";
@@ -32,23 +33,6 @@ const PropsWrapper = ({ children }) => (
   <StyledPropsDiv>{children}</StyledPropsDiv>
 );
 
-const StyledPropSpan = styled.span`
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 16px;
-  margin-top: 16px;
-  margin-left: 16px;
-  ${({ theme, active }) => {
-    if (active) {
-      return `
-      background-color: ${theme.palette.background.active};
-      color: ${theme.palette.text.active};
-      `;
-    }
-  }}
-`;
-
 const StyledSelectProp = styled(SelectProp)`
   margin-top: 16px;
   margin-left: 16px;
@@ -59,9 +43,15 @@ const StyledVoteProp = styled(VoteProp)`
   margin-left: 16px;
 `;
 
+const StyledGenerateArtButton = styled(GenerateArtButton)`
+  margin-top: 16px;
+  margin-left: 16px;
+`;
+
 NewsHeadline.Heading = Heading;
 NewsHeadline.PropsWrapper = PropsWrapper;
 NewsHeadline.SelectProp = StyledSelectProp;
 NewsHeadline.VoteProp = StyledVoteProp;
+NewsHeadline.GenerateArt = StyledGenerateArtButton;
 
 export default NewsHeadline;

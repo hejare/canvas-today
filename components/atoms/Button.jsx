@@ -4,6 +4,7 @@ import { SpinnerBar } from "@/components/atoms/SpinnerBar";
 const EnabledDiv = styled.div`
   cursor: pointer;
   position: relative;
+  text-align: center;
   align-items: center;
   justify-content: center;
   border-radius: 5px;

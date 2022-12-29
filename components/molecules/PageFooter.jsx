@@ -55,8 +55,8 @@ const PageFooter = ({ healthStatus }) => (
         <NavLink href="/api/hre/nft">
           <code>/hre/nft</code>
         </NavLink>
-        <NavLink href="/api/hre/balance-and-fees">
-          <code>/hre/balance-and-fees</code>
+        <NavLink href="/api/hre/balance">
+          <code>/hre/balance</code>
         </NavLink>
         <NavLink href="/api/hre/info">
           <code>/hre/info</code>

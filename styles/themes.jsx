@@ -126,6 +126,7 @@ const dark = {
         primary: colors.lightGreen,
         secondary: colors.darkGreen,
       },
+      backdrop: "#00000080",
       error: colors.white,
       active: colors.white,
       disabled: colors.mediumGrey,
