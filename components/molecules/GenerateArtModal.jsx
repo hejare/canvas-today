@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Modal from "./Modal";
 import Button from "../atoms/Button";
@@ -55,6 +55,18 @@ const ImageDetail = styled.span`
   display: block;
 `;
 
+const PromptInput = styled.input`
+  width: 100%;
+`;
+
+const SeedInput = styled.input`
+  width: 80px;
+`;
+
+const EngineSelector = styled.select`
+  width: 50%;
+`;
+
 const FIVE_SECONDS_IN_MS = 5000;
 const GenerateArtModal = ({ isOpen, onClose, headlineId }) => {
   const [showingImage, setShowingImage] = useState(true);
@@ -66,11 +78,28 @@ const GenerateArtModal = ({ isOpen, onClose, headlineId }) => {
   const [imageUrl, setImageUrl] = useState(
     "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081",
   );
+  const [promptDetails, setPromptDetails] = useState({});
+  const promptRef = useRef();
+  const seedRef = useRef();
+  const engineRef = useRef();
 
-  // useEffect(() => {
-  // TODO
-  // setHeadline(the-headline);
-  // }, [headlineId]);
+  useEffect(() => {
+    backendClient
+      .get("art", { params: { prompt: 1, headlineId } })
+      .then(({ result }) => {
+        setPromptDetails({
+          ...result,
+        });
+      })
+      .catch((e) => {
+        const newError = e.message.error;
+        let newErrorMessage = e.message;
+        if (newError) {
+          newErrorMessage = newError;
+        }
+        setErrorMessage(newErrorMessage);
+      });
+  }, [headlineId]);
 
   useInterval(() => {
     console.log("(INTERVAL running...)");
@@ -84,6 +113,7 @@ const GenerateArtModal = ({ isOpen, onClose, headlineId }) => {
           prompt: result.prompt,
           seed: result.seed,
           id: result.id,
+          engine: result.engine, // TODO
         });
         if (result.imageUrl === "") {
           setInterval(FIVE_SECONDS_IN_MS);
@@ -103,8 +133,21 @@ const GenerateArtModal = ({ isOpen, onClose, headlineId }) => {
 
   const generateArt = () => {
     setErrorMessage();
+    console.log({
+      headlineId,
+      prompt: promptRef.current.value,
+      seed: seedRef.current.value,
+      engine: engineRef.current.value,
+    });
     backendClient
-      .post("art", { body: { headlineId } })
+      .post("art", {
+        body: {
+          headlineId,
+          prompt: promptRef.current.value,
+          seed: seedRef.current.value,
+          engine: engineRef.current.value,
+        },
+      })
       .then((result) => {
         const { artId } = result;
         console.log(result);
@@ -134,6 +177,7 @@ const GenerateArtModal = ({ isOpen, onClose, headlineId }) => {
       </ImageContainer>
       <InfoContainer>
         <Info>
+          <ErrorMessage>{errorMessage}</ErrorMessage>
           <ImageDetails>
             {Object.entries(imageDetails).map(([key, value]) => (
               <ImageDetail key={key}>
@@ -142,8 +186,27 @@ const GenerateArtModal = ({ isOpen, onClose, headlineId }) => {
             ))}
           </ImageDetails>
         </Info>
+        <PromptInput
+          ref={promptRef}
+          type="text"
+          defaultValue={promptDetails.prompt}
+        />
+        <span>
+          Seed:{" "}
+          <SeedInput
+            ref={seedRef}
+            width="50%"
+            type="number"
+            defaultValue={promptDetails.seed}
+          />
+        </span>
+        <span>
+          AI Engine:
+          <EngineSelector ref={engineRef}>
+            <option value="REPLICATE">REPLICATE</option>
+          </EngineSelector>
+        </span>
         <ButtonsContainer>
-          <ErrorMessage>{errorMessage}</ErrorMessage>
           <ImageCard.ButtonProp
             onClick={generateArt}
             loading={interval}
